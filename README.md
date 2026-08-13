@@ -68,6 +68,7 @@ dduwowcj          →  được
 - 読み上げ（SpeechSynthesis）: 主要ブラウザ。OS にベトナム語の音声が入っていない場合は読み上げが無音になります（Windows は「設定 > 時刻と言語 > 音声認識」から音声パックを追加）。
 - 音声認識（SpeechRecognition）: **Chrome / Edge のみ**。マイクの許可と、`https` または `localhost` での配信が必要です。
 - 未対応ブラウザでもキーボード入力の練習は問題なく動きます。
+- フォント: ベトナム語の表示に [Be Vietnam Pro](https://fonts.google.com/specimen/Be+Vietnam+Pro) を Google Fonts から読み込みます（唯一の外部依存）。オフラインや読み込み失敗時は OS のフォントにフォールバックします。日本語は従来どおり Hiragino Sans / Noto Sans JP などが使われます。
 
 ## ローカルで動かす
 

@@ -27,13 +27,16 @@
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
+/* 入力欄やボタンにも本文のフォントを効かせる（既定だと OS のフォームフォントになる） */
+input, button, select, textarea { font-family: inherit; }
 
 html, body {
   margin: 0;
   padding: 0;
   background: var(--bg);
   color: var(--fg);
-  font-family: "Hiragino Sans", "Noto Sans JP", "Yu Gothic UI", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* ベトナム語は Be Vietnam Pro（声調記号の設計が丁寧）、日本語は以降にフォールバック */
+  font-family: "Be Vietnam Pro", "Hiragino Sans", "Noto Sans JP", "Yu Gothic UI", system-ui, -apple-system, "Segoe UI", sans-serif;
   line-height: 1.6;
 }
 
