@@ -59,6 +59,10 @@
                autocapitalize="off" spellcheck="false" placeholder="ここに入力（chaof → chào のように自動変換）" aria-label="ベトナム語の入力">
         <button class="mic-btn" id="btnMic" title="音声入力（ベトナム語で話す）" aria-label="音声入力">🎤</button>
       </div>
+      <div class="telex-hint" id="telexHint" hidden>
+        <span class="telex-hint-label">TELEX</span>
+        <div class="chips" id="telexChips"></div>
+      </div>
       <div class="input-status" id="inputStatus"></div>
     </div>
 
@@ -123,7 +127,7 @@
 </dialog>
 
 <footer class="foot">
-  <span>Enter で答え合わせ / ⌘・Ctrl + Enter で次へ</span>
+  <span>正解は入力した時点で自動判定 / Enter でスキップ（後で再出題）</span>
   <span class="foot-right">
     <span id="compat" class="compat"></span>
     <button class="icon-btn" id="btnSettings" aria-label="設定" title="設定">⚙️</button>
