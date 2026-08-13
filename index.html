@@ -10,27 +10,6 @@
 </head>
 <body>
 
-<header class="topbar">
-  <div class="brand">
-    <span class="flag brand-mark" aria-hidden="true">★</span>
-    <div>
-      <h1>Tiếng Việt Drill</h1>
-      <p class="brand-sub">ベトナム語 入力＆発音 練習</p>
-    </div>
-  </div>
-  <div class="topbar-right">
-    <div class="stat" title="正解数 / 全フレーズ数">
-      <span class="stat-value" id="statProgress">0 / 0</span>
-      <span class="stat-label">進捗</span>
-    </div>
-    <div class="stat" title="ノーミス正解の割合">
-      <span class="stat-value" id="statAccuracy">–</span>
-      <span class="stat-label">正確さ</span>
-    </div>
-    <button class="icon-btn" id="btnSettings" aria-label="設定" title="設定">⚙️</button>
-  </div>
-</header>
-
 <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
 
 <main class="stage">
@@ -62,32 +41,25 @@
       <p class="phrase" id="phrase" hidden></p>
     </div>
 
-    <!-- 入力 -->
-    <div class="input-row">
-      <input id="answer" class="answer" type="text" autocomplete="off" autocorrect="off"
-             autocapitalize="off" spellcheck="false" placeholder="ここにベトナム語を入力（TELEX入力でもOK）" aria-label="ベトナム語の入力">
-      <button class="mic-btn" id="btnMic" title="音声入力（ベトナム語で話す）" aria-label="音声入力">🎤</button>
-    </div>
-    <div class="input-status" id="inputStatus"></div>
-
-    <div class="controls">
-      <button class="ghost-btn" id="btnSpeak">🔊 もう一度聞く</button>
-      <button class="ghost-btn" id="btnSlow">🐢 ゆっくり</button>
-      <button class="ghost-btn" id="btnHint">💡 TELEXヒント</button>
-      <button class="ghost-btn" id="btnSkip">⏭ スキップ</button>
-    </div>
-
     <!-- 日本語訳 -->
     <div class="meaning">
-      <span class="section-tag">日本語訳</span>
       <p class="ja" id="ja"></p>
     </div>
 
     <!-- 品詞分解 + 説明 -->
     <div class="breakdown blurred" id="breakdown">
-      <span class="section-tag">品詞分解</span>
       <ul class="words" id="words"></ul>
       <p class="note" id="note"></p>
+    </div>
+
+    <!-- 入力（スクロール中は画面下部に貼り付く） -->
+    <div class="input-dock">
+      <div class="input-row">
+        <input id="answer" class="answer" type="text" autocomplete="off" autocorrect="off"
+               autocapitalize="off" spellcheck="false" placeholder="ここに入力（chaof → chào のように自動変換）" aria-label="ベトナム語の入力">
+        <button class="mic-btn" id="btnMic" title="音声入力（ベトナム語で話す）" aria-label="音声入力">🎤</button>
+      </div>
+      <div class="input-status" id="inputStatus"></div>
     </div>
 
   </section>
@@ -103,6 +75,7 @@
     <ol class="gate-steps">
       <li>絵と日本語訳を見て、ベトナム語を<strong>思い出す</strong></li>
       <li>声調記号があれば <strong>TELEXヒント</strong> が出る</li>
+      <li><strong>UniKey は不要</strong>。<code>chaof</code> と打てば <code>chào</code> に自動変換される</li>
       <li>フレーズが表示され、<strong>2回読み上げ</strong>（2回目はゆっくり）</li>
       <li>そのまま <strong>音声入力モード</strong>。話すか、キーボードで入力</li>
     </ol>
@@ -131,6 +104,7 @@
       <input type="range" id="setRate2" min="0.3" max="1" step="0.05">
     </label>
 
+    <label class="check"><input type="checkbox" id="setTelex"> TELEX を自動変換する（UniKey 不要）</label>
     <label class="check"><input type="checkbox" id="setAutoSpeak"> フレーズ表示後に自動で2回読み上げる</label>
     <label class="check"><input type="checkbox" id="setAutoListen"> 読み上げ後に自動で音声入力モードにする</label>
     <label class="check"><input type="checkbox" id="setVoiceAdvance"> 発音が正しければ次のフレーズへ進む</label>
@@ -150,7 +124,10 @@
 
 <footer class="foot">
   <span>Enter で答え合わせ / ⌘・Ctrl + Enter で次へ</span>
-  <span id="compat" class="compat"></span>
+  <span class="foot-right">
+    <span id="compat" class="compat"></span>
+    <button class="icon-btn" id="btnSettings" aria-label="設定" title="設定">⚙️</button>
+  </span>
 </footer>
 
 <script src="js/telex.js"></script>
