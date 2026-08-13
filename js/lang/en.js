@@ -65,6 +65,7 @@ I18N.register('en', {
     ttsOffBody: 'This browser cannot read text aloud. You can still practise by reading and typing.',
     noVoiceTitle: 'No Vietnamese voice installed',
     noVoiceBody: 'Add Vietnamese in your operating system’s speech settings to enable reading aloud.',
+    noVoiceWin: 'On Windows: press Win + X then A to open the terminal as administrator, run  Add-WindowsCapability -Online -Name "Language.TextToSpeech~~~vi-VN~0.0.1.0"  and restart the PC.',
     micDeniedTitle: 'Microphone unavailable',
     micDeniedBody: 'Check the microphone permission in your browser.',
     doneTitle: 'Chúc mừng!',

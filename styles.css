@@ -227,7 +227,7 @@ html, body {
 .toast-head { display: flex; align-items: center; gap: 8px; }
 .toast-icon { font-size: 16px; }
 .toast-title { font-weight: 700; font-size: 14px; }
-.toast-body { font-size: 13px; color: var(--fg-dim); margin-top: 6px; }
+.toast-body { font-size: 13px; color: var(--fg-dim); margin-top: 6px; white-space: pre-line; overflow-wrap: anywhere; }
 .toast-foot { font-size: 11px; color: var(--fg-dim); margin-top: 8px; }
 
 /* ---------- 起動ゲート ---------- */

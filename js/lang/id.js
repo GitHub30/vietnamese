@@ -65,6 +65,7 @@ I18N.register('id', {
     ttsOffBody: 'Peramban ini tidak bisa membacakan teks. Berlatih membaca dan mengetik tetap bisa.',
     noVoiceTitle: 'Suara bahasa Vietnam belum terpasang',
     noVoiceBody: 'Tambahkan bahasa Vietnam di pengaturan suara sistem agar bisa dibacakan.',
+    noVoiceWin: 'Di Windows: tekan Win + X lalu A untuk membuka terminal sebagai administrator, jalankan  Add-WindowsCapability -Online -Name "Language.TextToSpeech~~~vi-VN~0.0.1.0"  lalu nyalakan ulang komputernya.',
     micDeniedTitle: 'Mikrofon tidak tersedia',
     micDeniedBody: 'Periksa izin mikrofon di peramban.',
     doneTitle: 'Chúc mừng!',

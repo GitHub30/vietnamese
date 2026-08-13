@@ -65,6 +65,7 @@ I18N.register('ko', {
     ttsOffBody: '이 브라우저는 음성 합성을 지원하지 않습니다. 보고 입력하는 연습은 가능합니다.',
     noVoiceTitle: '베트남어 음성이 설치되어 있지 않습니다',
     noVoiceBody: 'OS 음성 설정에서 베트남어를 추가하면 읽기가 활성화됩니다.',
+    noVoiceWin: 'Windows에서는 Win + X → A 로 관리자 터미널을 열고  Add-WindowsCapability -Online -Name "Language.TextToSpeech~~~vi-VN~0.0.1.0"  를 실행한 뒤 재시작하세요.',
     micDeniedTitle: '마이크를 사용할 수 없습니다',
     micDeniedBody: '브라우저의 마이크 권한을 확인해 주세요.',
     doneTitle: 'Chúc mừng!',

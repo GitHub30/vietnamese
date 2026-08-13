@@ -584,6 +584,12 @@
   });
 
   /* ---------------- 起動 ---------------- */
+  function isWindows() {
+    var uad = navigator.userAgentData;
+    if (uad && uad.platform) return /windows/i.test(uad.platform);
+    return /Windows/i.test(navigator.userAgent || '');
+  }
+
   function compatNote() {
     if (!Speech.ttsSupported) {
       toast({ kind: 'info', icon: '🔈', title: I18N.t('ttsOffTitle'), body: I18N.t('ttsOffBody'), duration: 6000 });
@@ -593,7 +599,14 @@
     }
     setTimeout(function () {
       if (Speech.ttsSupported && !Speech.vietnameseVoices().length) {
-        toast({ kind: 'info', icon: '🔈', title: I18N.t('noVoiceTitle'), body: I18N.t('noVoiceBody'), duration: 7000 });
+        // Windows なら音声パックの入れ方まで案内する（コマンドが長いので表示時間も延ばす）
+        var win = isWindows();
+        toast({
+          kind: 'info', icon: '🔈',
+          title: I18N.t('noVoiceTitle'),
+          body: I18N.t('noVoiceBody') + (win ? '\n\n' + I18N.t('noVoiceWin') : ''),
+          duration: win ? 20000 : 7000
+        });
       }
     }, 2000);
   }

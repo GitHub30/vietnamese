@@ -65,6 +65,7 @@ I18N.register('ja', {
     ttsOffBody: 'このブラウザは音声合成に未対応です。表示と入力で練習できます。',
     noVoiceTitle: 'ベトナム語の音声が未インストール',
     noVoiceBody: 'OS の音声設定で「ベトナム語」を追加すると読み上げが有効になります。',
+    noVoiceWin: 'Windows なら Win + X → A で管理者ターミナルを開き、  Add-WindowsCapability -Online -Name "Language.TextToSpeech~~~vi-VN~0.0.1.0"  を実行して再起動してください。',
     micDeniedTitle: 'マイクが使えません',
     micDeniedBody: 'ブラウザのマイク許可を確認してください。',
     doneTitle: 'Chúc mừng!',
