@@ -9,7 +9,7 @@
     recall: $('#recall'), recallCount: $('#recallCount'), ringFg: $('#ringFg'),
     phrase: $('#phrase'),
     answer: $('#answer'), inputStatus: $('#inputStatus'), mic: $('#btnMic'),
-    telexHint: $('#telexHint'), telexChips: $('#telexChips'),
+    telexHint: $('#telexHint'), telexSeq: $('#telexSeq'),
     ja: $('#ja'), words: $('#words'), note: $('#note'), breakdown: $('#breakdown'),
     toasts: $('#toasts'), card: $('#card'),
     progressBar: $('#progressBar'),
@@ -33,7 +33,8 @@
     queue: [], idx: 0, current: null,
     revealed: false, solved: 0, perfect: 0, missed: false, hintShown: false,
     timers: [], raf: 0, busy: false, voiceTries: 0,
-    raw: ''            // TELEX 変換前の打鍵列
+    raw: '',           // TELEX 変換前の打鍵列
+    hintKeys: ''       // ヒントに出しているフレーズ全体の打鍵列
   };
 
   /* ---------------- 設定の保存 ---------------- */
@@ -188,21 +189,27 @@
     else startCountdown(revealAt, reveal);
   }
 
-  /** 入力欄の下に TELEX の打ち方を並べる（次のフレーズに変わるまで出しっぱなし） */
+  /** 入力欄の下にフレーズ全体の打鍵列を出す（次のフレーズに変わるまで出しっぱなし） */
   function showTelexHint(vi) {
     state.hintShown = true;
-    var hints = Telex.hints(vi);
-    if (!hints.length) { hideTelexHint(); return; }
-    el.telexChips.innerHTML = hints.map(function (h) {
-      return '<span class="chip"><b>' + esc(h.char) + '</b><span class="chip-arrow">→</span><code>' +
-             esc(h.keys) + '</code></span>';
-    }).join('');
+    state.hintKeys = Telex.typingKeys(vi);
     el.telexHint.hidden = false;
+    renderTelexHint();
+  }
+
+  /** 入力済みのところまでハイライトする */
+  function renderTelexHint() {
+    if (el.telexHint.hidden || !state.hintKeys) return;
+    var typed = Telex.typingKeys(el.answer.value);
+    var n = Telex.commonPrefixLength(typed, state.hintKeys);
+    el.telexSeq.innerHTML = '<span class="done">' + esc(state.hintKeys.slice(0, n)) + '</span>' +
+                            '<span class="rest">' + esc(state.hintKeys.slice(n)) + '</span>';
   }
 
   function hideTelexHint() {
     el.telexHint.hidden = true;
-    el.telexChips.innerHTML = '';
+    el.telexSeq.innerHTML = '';
+    state.hintKeys = '';
   }
 
   function reveal() {
@@ -339,6 +346,7 @@
   function onInput() {
     if (!state.current || state.busy) return;
     renderDiff();
+    renderTelexHint();
     var v = el.answer.value;
     if (!v) { setStatus('', ''); return; }
     if (isCorrect(v)) { succeed('type'); return; }
