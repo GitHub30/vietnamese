@@ -17,6 +17,7 @@
   };
 
   var DEFAULTS = {
+    lang: '',          // 空ならブラウザの言語設定から判定する
     delay: 5,          // フレーズ表示までの秒数（アクティブリコール）
     rate1: 0.95,       // 1回目の読み上げ速度
     rate2: 0.6,        // 2回目（ゆっくり）
@@ -96,6 +97,23 @@
   }
 
   /* ---------------- 描画 ---------------- */
+  /** 訳・キャプション・品詞分解（言語を切り替えたときはここだけ描き直す） */
+  function renderPhraseTexts(p) {
+    var tr = I18N.phrase(p.vi);
+    el.artCaption.textContent = tr.caption;
+    el.ja.textContent = tr.t;
+    el.words.innerHTML = p.words.map(function (w) {
+      var e = I18N.word(p.vi, w.w);
+      return '<li class="word">' +
+        '<span class="word-vi" dir="ltr">' + esc(w.w) + '</span>' +
+        '<span class="word-pos">' + esc(I18N.pos(w.pos)) + '</span>' +
+        '<span class="word-ja">' + esc(e[0]) + '</span>' +
+        (e[1] ? '<span class="word-note">' + esc(e[1]) + '</span>' : '') +
+        '</li>';
+    }).join('');
+    el.note.textContent = tr.note;
+  }
+
   function renderCard(p) {
     // イメージ画像
     el.art.style.setProperty('--c1', p.art.colors[0]);
@@ -104,21 +122,8 @@
       '<span class="art-sub art-sub-a">' + p.art.sub[0] + '</span>' +
       '<span class="art-main">' + p.art.main + '</span>' +
       '<span class="art-sub art-sub-b">' + p.art.sub[1] + '</span>';
-    el.artCaption.textContent = p.art.caption;
 
-    // 日本語訳
-    el.ja.textContent = p.ja;
-
-    // 品詞分解
-    el.words.innerHTML = p.words.map(function (w) {
-      return '<li class="word">' +
-        '<span class="word-vi">' + esc(w.w) + '</span>' +
-        '<span class="word-pos">' + esc(w.pos) + '</span>' +
-        '<span class="word-ja">' + esc(w.ja) + '</span>' +
-        (w.note ? '<span class="word-note">' + esc(w.note) + '</span>' : '') +
-        '</li>';
-    }).join('');
-    el.note.textContent = p.note;
+    renderPhraseTexts(p);
 
     // フレーズは伏せる
     el.phrase.hidden = true;
@@ -233,12 +238,12 @@
 
   function speakTwice() {
     var vi = state.current.vi;
-    setStatus('speaking', '🔊 1回目（ふつうの速さ）');
+    setStatus('speaking', I18N.t('speak1'));
     return Speech.speak(vi, settings.rate1)
       .then(function () { return Speech.pause(450); })
       .then(function () {
         if (!state.current || state.current.vi !== vi) return false;
-        setStatus('speaking', '🐢 2回目（ゆっくり）');
+        setStatus('speaking', I18N.t('speak2'));
         return Speech.speak(vi, settings.rate2);
       })
       .then(function () { return Speech.pause(250); });
@@ -247,7 +252,7 @@
   function afterSpeak() {
     if (!state.current) return;
     if (settings.autoListen && Speech.srSupported) startListening();
-    else setStatus('', 'キーボードで入力するか 🎤 を押して発音してみよう');
+    else setStatus('', I18N.t('typeOrSpeak'));
   }
 
   /* ---------------- 音声認識 ---------------- */
@@ -258,7 +263,7 @@
 
   function startListening() {
     if (!Speech.srSupported) {
-      toast({ kind: 'error', icon: '🚫', title: '音声認識に非対応', body: 'Chrome / Edge をお使いください。' });
+      toast({ kind: 'info', icon: 'ℹ️', title: I18N.t('srOffTitle'), body: I18N.t('srOffBody') });
       return;
     }
     Speech.cancel();
@@ -266,16 +271,16 @@
       onstart: function () {
         if (state.busy) { Speech.stopListening(); return; } // 開始前に正解していたら何もしない
         setMic(true);
-        setStatus('listening', '🎙️ 聞いています… ベトナム語で話してみてください');
+        setStatus('listening', I18N.t('listening'));
       },
       oninterim: function (text) { setAnswer(text); renderDiff(); setStatus('listening', '🎙️ ' + text); },
       onfinal: function (alts) { handleVoice(alts); },
       onend: function () { setMic(false); },
       onerror: function (err) {
         setMic(false);
-        if (err === 'no-speech') setStatus('', '声が聞き取れませんでした。🎤 でもう一度どうぞ');
-        else if (err === 'not-allowed') toast({ kind: 'error', icon: '🎤', title: 'マイクが使えません', body: 'ブラウザのマイク許可を確認してください。' });
-        else setStatus('', 'キーボード入力でも進められます');
+        if (err === 'no-speech') setStatus('', I18N.t('noSpeech'));
+        else if (err === 'not-allowed') toast({ kind: 'error', icon: '🎤', title: I18N.t('micDeniedTitle'), body: I18N.t('micDeniedBody') });
+        else setStatus('', I18N.t('keyboardOk'));
       }
     });
   }
@@ -293,16 +298,16 @@
     state.voiceTries++;
 
     if (exact) {
-      toast({ kind: 'success', icon: '🗣️', title: '発音 OK!', body: '「' + alts[0] + '」と聞き取れました', duration: 2600 });
+      toast({ kind: 'success', icon: '🗣️', title: I18N.t('voiceOkTitle'), body: I18N.t('voiceOkBody', { text: alts[0] }), duration: 2600 });
       if (settings.voiceAdvance) { succeed('voice'); return; }
-      setStatus('ok', '発音は正解です。Enter で次へ進みます');
+      setStatus('ok', I18N.t('voiceOkEnter'));
       return;
     }
     if (loose) {
-      setStatus('warn', '綴りは合っています。声調まで意識してもう一度：🎤');
-      toast({ kind: 'info', icon: '🎵', title: '惜しい！', body: '声調を意識してみましょう', duration: 3000 });
+      setStatus('warn', I18N.t('toneAgain'));
+      toast({ kind: 'info', icon: '🎵', title: I18N.t('closeTitle'), body: I18N.t('closeBody'), duration: 3000 });
     } else {
-      setStatus('warn', '「' + alts[0] + '」と聞こえました。🎤 でもう一度どうぞ');
+      setStatus('warn', I18N.t('heard', { text: alts[0] }));
     }
     renderDiff();
   }
@@ -353,10 +358,10 @@
     // 途中まで合っているか
     var t = Telex.normalize(state.current.vi), u = Telex.normalize(v);
     if (state.revealed) {
-      if (t.indexOf(u) === 0) setStatus('ok', 'その調子！');
-      else { state.missed = true; setStatus('warn', 'つづりを確認してみましょう'); }
+      if (t.indexOf(u) === 0) setStatus('ok', I18N.t('keepGoing'));
+      else { state.missed = true; setStatus('warn', I18N.t('checkSpelling')); }
     } else {
-      setStatus('', '入力中… （フレーズが出る前に打ててたら最高！）');
+      setStatus('', I18N.t('typing'));
     }
   }
 
@@ -400,9 +405,9 @@
     if (!state.missed) state.perfect++;
     renderStats();
 
-    var msg = how === 'voice' ? '声で正解！' : (state.missed ? '正解！' : 'ノーミス正解！');
+    var msg = how === 'voice' ? I18N.t('correctVoice') : (state.missed ? I18N.t('correct') : I18N.t('correctPerfect'));
     setStatus('ok', '✅ ' + msg);
-    toast({ kind: 'success', icon: '✅', title: msg, body: state.current.vi + ' — ' + state.current.ja, duration: 2400 });
+    toast({ kind: 'success', icon: '✅', title: msg, body: state.current.vi + ' — ' + I18N.phrase(state.current.vi).t, duration: 2400 });
 
     later(function () {
       el.phrase.classList.remove('correct');
@@ -419,7 +424,7 @@
     clearTimers();
     Speech.stopListening(); setMic(false);
     // まだ伏せたままでも答えを見せてから次へ送る
-    toast({ kind: 'info', icon: '⏭', title: 'スキップしました', body: state.current.vi + ' — ' + state.current.ja, duration: 3200 });
+    toast({ kind: 'info', icon: '⏭', title: I18N.t('skipTitle'), body: state.current.vi + ' — ' + I18N.phrase(state.current.vi).t, duration: 3200 });
     later(function () {
       // 後ろに回して復習する
       state.queue.push(state.queue[state.idx]);
@@ -433,13 +438,13 @@
     el.recall.hidden = true;
     el.phrase.hidden = false;
     el.phrase.textContent = 'Hoàn thành! 🎉';
-    el.ja.textContent = '全フレーズ終了！おつかれさまでした。';
+    el.ja.textContent = I18N.t('finishText');
     el.words.innerHTML = '';
-    el.note.textContent = '正確さ ' + accuracyText() + '（' + state.perfect + ' / ' + state.solved + ' がノーミス）';
+    el.note.textContent = I18N.t('accuracy', { pct: accuracyText(), a: state.perfect, b: state.solved });
     el.breakdown.classList.remove('blurred');
     el.answer.disabled = true;
-    setStatus('ok', 'もう一周する場合は ⚙️ 設定の「学習状況をリセット」からどうぞ');
-    toast({ kind: 'success', icon: '🎉', title: 'Chúc mừng!', body: 'すべてのフレーズをクリアしました', duration: 6000 });
+    setStatus('ok', I18N.t('finishHint'));
+    toast({ kind: 'success', icon: '🎉', title: I18N.t('doneTitle'), body: I18N.t('doneBody'), duration: 6000 });
   }
 
   function setStatus(kind, text) {
@@ -489,7 +494,7 @@
     setVoiceAdvance.checked = settings.voiceAdvance;
     setShuffle.checked = settings.shuffle;
     setTelex.checked = settings.telex;
-    $('#lblDelay').textContent = settings.delay + ' 秒';
+    $('#lblDelay').textContent = I18N.t('seconds', { n: settings.delay });
     $('#lblRate1').textContent = '×' + Number(settings.rate1).toFixed(2);
     $('#lblRate2').textContent = '×' + Number(settings.rate2).toFixed(2);
   }
@@ -515,39 +520,75 @@
     save();
   });
 
+  /* ---------------- 表示言語 ---------------- */
+  var langSelects = [$('#gateLang'), $('#setLangSelect')];
+
+  function fillLangSelects() {
+    var options = I18N.LANGS.map(function (l) {
+      return '<option value="' + esc(l.code) + '">' + esc(l.name) + '</option>';
+    }).join('');
+    langSelects.forEach(function (sel) {
+      if (!sel) return;
+      sel.innerHTML = options;
+      sel.value = I18N.current();
+    });
+  }
+
+  function changeLang(code) {
+    settings.lang = code;
+    save();
+    I18N.use(code, applyLanguage);
+  }
+
+  langSelects.forEach(function (sel) {
+    if (sel) sel.addEventListener('change', function () { changeLang(sel.value); });
+  });
+
+  /** 言語切り替え後の描き直し（出題の進行はそのまま） */
+  function applyLanguage() {
+    I18N.apply();
+    fillLangSelects();
+    syncSettingsUI();
+    renderVoiceSelect();
+    if (state.current) renderPhraseTexts(state.current);
+    else if (state.queue.length) renderPhraseTexts(state.queue[Math.min(state.idx, state.queue.length - 1)]);
+  }
+
   $('#btnSettings').addEventListener('click', function () { syncSettingsUI(); el.settings.showModal(); });
   $('#btnReset').addEventListener('click', function () {
     state.solved = 0; state.perfect = 0;
     buildQueue(); renderStats(); el.settings.close(); nextCard();
   });
 
-  Speech.onVoicesChanged(function (list) {
-    setVoice.innerHTML = list.length
-      ? list.map(function (v) {
-          return '<option value="' + esc(v.voiceURI) + '">' + esc(v.name + '（' + v.lang + '）') + '</option>';
+  var voiceList = [];
+  function renderVoiceSelect() {
+    setVoice.innerHTML = voiceList.length
+      ? voiceList.map(function (v) {
+          return '<option value="' + esc(v.voiceURI) + '">' + esc(v.name + ' (' + v.lang + ')') + '</option>';
         }).join('')
-      : '<option value="">ベトナム語の音声が見つかりません</option>';
+      : '<option value="">' + esc(I18N.t('noVoice')) + '</option>';
     if (settings.voiceURI) { setVoice.value = settings.voiceURI; Speech.setPreferredVoice(settings.voiceURI); }
+  }
+
+  Speech.onVoicesChanged(function (list) {
+    voiceList = list;
+    renderVoiceSelect();
   });
 
   /* ---------------- 起動 ---------------- */
   function compatNote() {
     if (!Speech.ttsSupported) {
-      toast({ kind: 'info', icon: '🔈', title: '読み上げに非対応', body: 'このブラウザは音声合成に未対応です。表示と入力で練習できます。', duration: 6000 });
+      toast({ kind: 'info', icon: '🔈', title: I18N.t('ttsOffTitle'), body: I18N.t('ttsOffBody'), duration: 6000 });
     }
     if (!Speech.srSupported) {
-      toast({ kind: 'info', icon: 'ℹ️', title: '音声認識について', body: 'このブラウザは音声認識に未対応です。キーボード入力で練習できます。', duration: 6000 });
+      toast({ kind: 'info', icon: 'ℹ️', title: I18N.t('srOffTitle'), body: I18N.t('srOffBody'), duration: 6000 });
     }
     setTimeout(function () {
       if (Speech.ttsSupported && !Speech.vietnameseVoices().length) {
-        toast({ kind: 'info', icon: '🔈', title: 'ベトナム語の音声が未インストール', body: 'OS の音声設定で「ベトナム語」を追加すると読み上げが有効になります。', duration: 7000 });
+        toast({ kind: 'info', icon: '🔈', title: I18N.t('noVoiceTitle'), body: I18N.t('noVoiceBody'), duration: 7000 });
       }
     }, 2000);
   }
-
-  buildQueue();
-  renderStats();
-  renderCard(state.queue[0]);
 
   // 読み上げとマイクはユーザー操作の後でないと開始できないため、起動ゲートを挟む
   var gate = document.getElementById('gate');
@@ -556,5 +597,14 @@
     setTimeout(function () { gate.hidden = true; }, 300);
     compatNote();
     nextCard();
+  });
+
+  // 言語パックを読み込んでから描画する（未設定ならブラウザの言語設定から判定）
+  I18N.use(settings.lang || I18N.detect(), function (code) {
+    if (!settings.lang) settings.lang = code;
+    buildQueue();
+    renderStats();
+    renderCard(state.queue[0]);
+    applyLanguage();
   });
 })();

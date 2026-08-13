@@ -207,23 +207,23 @@ html, body {
 .word-pos { font-size: 10px; color: var(--fg-dim); border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px; background: var(--bg-2); }
 .word-ja { font-size: 14px; }
 .word-note { grid-column: 1 / -1; font-size: 12px; color: var(--fg-dim); }
-.note { margin: 0; font-size: 13px; color: var(--fg-dim); background: var(--bg); border-left: 3px solid var(--accent-2); padding: 10px 12px; border-radius: 0 10px 10px 0; }
+.note { margin: 0; font-size: 13px; color: var(--fg-dim); background: var(--bg); border-inline-start: 3px solid var(--accent-2); padding: 10px 12px; border-radius: 0 10px 10px 0; }
 
 /* ---------- toast ---------- */
 .toasts {
-  position: fixed; top: 16px; right: 16px; z-index: 60;
+  position: fixed; top: 16px; inset-inline-end: 16px; z-index: 60;
   display: flex; flex-direction: column; gap: 10px; width: min(300px, calc(100vw - 32px));
 }
 .toast {
-  background: var(--bg-2); border: 1px solid var(--line); border-left: 4px solid var(--fg-dim);
+  background: var(--bg-2); border: 1px solid var(--line); border-inline-start: 4px solid var(--fg-dim);
   border-radius: 12px; box-shadow: var(--shadow); padding: 12px 14px;
   animation: slidein .3s ease; transition: opacity .35s, transform .35s;
 }
 .toast.out { opacity: 0; transform: translateX(20px); }
 @keyframes slidein { from { opacity: 0; transform: translateX(24px); } }
-.toast-success { border-left-color: var(--ok); }
-.toast-error { border-left-color: var(--ng); }
-.toast-info { border-left-color: #4a6cf7; }
+.toast-success { border-inline-start-color: var(--ok); }
+.toast-error { border-inline-start-color: var(--ng); }
+.toast-info { border-inline-start-color: #4a6cf7; }
 .toast-head { display: flex; align-items: center; gap: 8px; }
 .toast-icon { font-size: 16px; }
 .toast-title { font-weight: 700; font-size: 14px; }
@@ -250,6 +250,14 @@ html, body {
   background: var(--bg); border: 1px solid var(--line); border-radius: 5px; padding: 0 5px; color: var(--fg);
 }
 .gate-note { font-size: 11px; color: var(--fg-dim); margin: 14px 0 0; }
+.gate-lang {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  font-size: 12px; color: var(--fg-dim); margin: 0 0 18px;
+}
+.gate-lang select {
+  padding: 6px 10px; border-radius: 10px; border: 1px solid var(--line);
+  background: var(--bg); color: var(--fg); font-size: 13px;
+}
 
 /* ---------- 設定 ---------- */
 .sheet {

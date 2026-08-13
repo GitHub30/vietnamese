@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tiếng Việt Drill — ベトナム語入力練習</title>
-<meta name="description" content="アクティブリコール式のベトナム語フレーズ入力・発音練習アプリ。TELEXヒント、音声読み上げ、音声認識に対応。">
+<title>Tiếng Việt Drill</title>
+<meta name="description" content="Active-recall practice for Vietnamese phrases: TELEX hints, text-to-speech and voice input. Available in 11 languages.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23da251d'/><text x='50' y='72' font-size='72' text-anchor='middle' fill='%23ffcd00'>★</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,7 @@
 <main class="stage">
   <section class="card" id="card">
 
-    <!-- 画像（イメージ） -->
+    <!-- イメージ画像 -->
     <figure class="art" id="art">
       <div class="art-scene" id="artScene"></div>
       <figcaption class="art-caption" id="artCaption"></figcaption>
@@ -35,16 +35,16 @@
           <span class="recall-count" id="recallCount">5</span>
         </div>
         <div class="recall-text">
-          <strong>思い出してみよう</strong>
-          <span>ベトナム語で何と言う？ 打てる人はそのまま入力してOK</span>
+          <strong data-i18n="recallTitle"></strong>
+          <span data-i18n="recallSub"></span>
         </div>
-        <button class="ghost-btn" id="btnRevealNow">今すぐ表示</button>
+        <button class="ghost-btn" id="btnRevealNow" data-i18n="revealNow"></button>
       </div>
 
-      <p class="phrase" id="phrase" hidden></p>
+      <p class="phrase" id="phrase" dir="ltr" hidden></p>
     </div>
 
-    <!-- 日本語訳 -->
+    <!-- 訳 -->
     <div class="meaning">
       <p class="ja" id="ja"></p>
     </div>
@@ -58,17 +58,17 @@
     <!-- 入力（スクロール中は画面下部に貼り付く） -->
     <div class="input-dock">
       <div class="input-row">
-        <input id="answer" class="answer" type="text" autocomplete="off" autocorrect="off"
-               autocapitalize="off" spellcheck="false" placeholder="ここに入力（chaof → chào のように自動変換）" aria-label="ベトナム語の入力">
-        <button class="mic-btn" id="btnMic" title="音声入力（ベトナム語で話す）" aria-label="音声入力">🎤</button>
+        <input id="answer" class="answer" type="text" autocomplete="off" autocorrect="off" dir="ltr"
+               autocapitalize="off" spellcheck="false" data-i18n-attr="placeholder:answerPlaceholder,aria-label:answerLabel">
+        <button class="mic-btn" id="btnMic" data-i18n-attr="title:micLabel,aria-label:micLabel">🎤</button>
       </div>
-      <div class="telex-hint" id="telexHint" hidden>
+      <div class="telex-hint" id="telexHint" dir="ltr" hidden>
         <span class="telex-hint-label">TELEX</span>
         <code class="telex-seq" id="telexSeq"></code>
       </div>
       <div class="input-foot">
         <div class="input-status" id="inputStatus"></div>
-        <button class="icon-btn" id="btnSettings" aria-label="設定" title="設定">⚙️</button>
+        <button class="icon-btn" id="btnSettings" data-i18n-attr="title:settingsLabel,aria-label:settingsLabel">⚙️</button>
       </div>
     </div>
 
@@ -81,58 +81,68 @@
 <div class="gate" id="gate">
   <div class="gate-inner">
     <span class="flag gate-mark" aria-hidden="true">★</span>
-    <h2>ベトナム語 入力＆発音ドリル</h2>
+    <h2 data-i18n="gateTitle"></h2>
     <ol class="gate-steps">
-      <li>絵と日本語訳を見て、ベトナム語を<strong>思い出す</strong></li>
-      <li>声調記号があれば <strong>TELEXヒント</strong> が出る</li>
-      <li><strong>UniKey は不要</strong>。<code>chaof</code> と打てば <code>chào</code> に自動変換される</li>
-      <li>フレーズが表示され、<strong>2回読み上げ</strong>（2回目はゆっくり）</li>
-      <li>そのまま <strong>音声入力モード</strong>。話すか、キーボードで入力</li>
-      <li>正解は入力した時点で自動判定。<strong>Enter</strong> でスキップ（後で再出題）</li>
+      <li data-i18n="step1"></li>
+      <li data-i18n="step2"></li>
+      <li data-i18n="step3"></li>
+      <li data-i18n="step4"></li>
+      <li data-i18n="step5"></li>
+      <li data-i18n="step6"></li>
     </ol>
-    <button class="primary-btn big" id="btnStart">▶ 練習をはじめる</button>
-    <p class="gate-note">読み上げ・音声認識には Chrome / Edge を推奨します。<br>待ち時間や読み上げ速度は ⚙️ から変更できます。</p>
+    <label class="gate-lang">
+      <span data-i18n="setLang"></span>
+      <select id="gateLang"></select>
+    </label>
+    <button class="primary-btn big" id="btnStart" data-i18n="start"></button>
+    <p class="gate-note"><span data-i18n="gateNote1"></span><br><span data-i18n="gateNote2"></span></p>
   </div>
 </div>
 
 <!-- 設定ダイアログ -->
 <dialog class="sheet" id="settings">
   <form method="dialog">
-    <h2>設定</h2>
+    <h2 data-i18n="setTitle"></h2>
+
+    <div class="field">
+      <span data-i18n="setLang"></span>
+      <select id="setLangSelect"></select>
+    </div>
 
     <label class="field">
-      <span>フレーズが表示されるまでの待ち時間<em id="lblDelay"></em></span>
+      <span><span data-i18n="setDelay"></span><em id="lblDelay"></em></span>
       <input type="range" id="setDelay" min="0" max="15" step="1">
     </label>
 
     <label class="field">
-      <span>読み上げ速度（1回目）<em id="lblRate1"></em></span>
+      <span><span data-i18n="setRate1"></span><em id="lblRate1"></em></span>
       <input type="range" id="setRate1" min="0.5" max="1.2" step="0.05">
     </label>
 
     <label class="field">
-      <span>読み上げ速度（2回目・ゆっくり）<em id="lblRate2"></em></span>
+      <span><span data-i18n="setRate2"></span><em id="lblRate2"></em></span>
       <input type="range" id="setRate2" min="0.3" max="1" step="0.05">
     </label>
 
-    <label class="check"><input type="checkbox" id="setTelex"> TELEX を自動変換する（UniKey 不要）</label>
-    <label class="check"><input type="checkbox" id="setAutoSpeak"> フレーズ表示後に自動で2回読み上げる</label>
-    <label class="check"><input type="checkbox" id="setAutoListen"> 読み上げ後に自動で音声入力モードにする</label>
-    <label class="check"><input type="checkbox" id="setVoiceAdvance"> 発音が正しければ次のフレーズへ進む</label>
-    <label class="check"><input type="checkbox" id="setShuffle"> 出題順をシャッフルする</label>
+    <label class="check"><input type="checkbox" id="setTelex"> <span data-i18n="setTelex"></span></label>
+    <label class="check"><input type="checkbox" id="setAutoSpeak"> <span data-i18n="setAutoSpeak"></span></label>
+    <label class="check"><input type="checkbox" id="setAutoListen"> <span data-i18n="setAutoListen"></span></label>
+    <label class="check"><input type="checkbox" id="setVoiceAdvance"> <span data-i18n="setVoiceAdvance"></span></label>
+    <label class="check"><input type="checkbox" id="setShuffle"> <span data-i18n="setShuffle"></span></label>
 
     <div class="field">
-      <span>ベトナム語の音声</span>
+      <span data-i18n="setVoice"></span>
       <select id="setVoice"></select>
     </div>
 
     <div class="sheet-actions">
-      <button class="ghost-btn" id="btnReset" type="button">学習状況をリセット</button>
-      <button class="primary-btn" value="close">閉じる</button>
+      <button class="ghost-btn" id="btnReset" type="button" data-i18n="reset"></button>
+      <button class="primary-btn" value="close" data-i18n="close"></button>
     </div>
   </form>
 </dialog>
 
+<script src="js/i18n.js"></script>
 <script src="js/telex.js"></script>
 <script src="js/data.js"></script>
 <script src="js/speech.js"></script>
