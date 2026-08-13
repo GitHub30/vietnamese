@@ -71,10 +71,25 @@ window.Telex = (function () {
       if (!t) { word += c; continue; }
       var keys = t.keys, last = keys.charAt(keys.length - 1);
       if (keys.length > 1 && 'sfrxj'.indexOf(last) >= 0) { tone = last; keys = keys.slice(0, -1); }
+      // ư + ơ が続くときは w を1回で済ませる（uwow -> uow）
+      if (keys.toLowerCase() === 'ow' && word.slice(-2).toLowerCase() === 'uw') word = word.slice(0, -1);
       word += keys;
     }
     flush();
     return out;
+  }
+
+  /**
+   * 1文字を「声調記号を除いた文字」と「声調記号」に分ける
+   * 'ấ' -> { base: 'â', tone: '́' }
+   */
+  function splitTone(ch) {
+    var d = (ch || '').normalize('NFD'), base = '', tone = '';
+    for (var i = 0; i < d.length; i++) {
+      if (TONE[d[i]]) tone = d[i];
+      else base += d[i];
+    }
+    return { base: base.normalize('NFC'), tone: tone };
   }
 
   /** 2つの打鍵列の一致している先頭文字数（大文字小文字は区別しない） */
@@ -231,6 +246,7 @@ window.Telex = (function () {
     hasDiacritics: hasDiacritics,
     sequence: sequence,
     typingKeys: typingKeys,
+    splitTone: splitTone,
     commonPrefixLength: commonPrefixLength,
     type: type,
     normalize: normalize,

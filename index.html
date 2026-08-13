@@ -63,7 +63,10 @@
         <span class="telex-hint-label">TELEX</span>
         <code class="telex-seq" id="telexSeq"></code>
       </div>
-      <div class="input-status" id="inputStatus"></div>
+      <div class="input-foot">
+        <div class="input-status" id="inputStatus"></div>
+        <button class="icon-btn" id="btnSettings" aria-label="設定" title="設定">⚙️</button>
+      </div>
     </div>
 
   </section>
@@ -82,9 +85,10 @@
       <li><strong>UniKey は不要</strong>。<code>chaof</code> と打てば <code>chào</code> に自動変換される</li>
       <li>フレーズが表示され、<strong>2回読み上げ</strong>（2回目はゆっくり）</li>
       <li>そのまま <strong>音声入力モード</strong>。話すか、キーボードで入力</li>
+      <li>正解は入力した時点で自動判定。<strong>Enter</strong> でスキップ（後で再出題）</li>
     </ol>
     <button class="primary-btn big" id="btnStart">▶ 練習をはじめる</button>
-    <p class="gate-note">読み上げ・音声認識には Chrome / Edge を推奨します。</p>
+    <p class="gate-note">読み上げ・音声認識には Chrome / Edge を推奨します。<br>待ち時間や読み上げ速度は ⚙️ から変更できます。</p>
   </div>
 </div>
 
@@ -125,14 +129,6 @@
     </div>
   </form>
 </dialog>
-
-<footer class="foot">
-  <span>正解は入力した時点で自動判定 / Enter でスキップ（後で再出題）</span>
-  <span class="foot-right">
-    <span id="compat" class="compat"></span>
-    <button class="icon-btn" id="btnSettings" aria-label="設定" title="設定">⚙️</button>
-  </span>
-</footer>
 
 <script src="js/telex.js"></script>
 <script src="js/data.js"></script>
