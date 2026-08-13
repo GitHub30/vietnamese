@@ -375,16 +375,24 @@
     el.phrase.innerHTML = html;
   }
 
-  /** 1文字ぶんの色分け。声調記号だけが違うときは、その記号だけを赤くする */
+  /**
+   * 1文字ぶんの色分け。
+   * 素の文字が合っていれば、足りない記号（母音の記号・声調記号・đ の横棒）だけを赤くする。
+   * 判定は「素の文字 → 母音の記号 → 声調記号」の順で、最初に食い違ったところから先が赤。
+   */
   function diffChar(t, u) {
     if (u === undefined) return '<span class="pending">' + esc(t) + '</span>';
     if (u.toLowerCase() === t.toLowerCase()) return '<span class="ok">' + esc(t) + '</span>';
 
-    var dt = Telex.splitTone(t), du = Telex.splitTone(u);
-    if (dt.tone && dt.base.toLowerCase() === du.base.toLowerCase()) {
-      // 結合文字だけを別要素にしても Chrome は1つのグリフに合成して単色で描くため、
-      // 文字全体を赤で描いた上に「声調なしの文字」を緑で重ねて、記号だけ赤く見せる
-      return '<span class="tone-ng" data-base="' + esc(dt.base) + '">' + esc(t) + '</span>';
+    var dt = Telex.splitMarks(t), du = Telex.splitMarks(u);
+    if (dt.letter.toLowerCase() === du.letter.toLowerCase()) {
+      // 合っているところまでを組み立て直す
+      var matched = (dt.mod === du.mod) ? Telex.letterWithMod(dt) : dt.letter;
+      if (matched !== t.normalize('NFC')) {
+        // 結合文字だけを別要素にしても Chrome は1つのグリフに合成して単色で描くため、
+        // 文字全体を赤で描いた上に「合っている部分」を緑で重ねて、記号だけ赤く見せる
+        return '<span class="mark-ng" data-base="' + esc(matched) + '">' + esc(t) + '</span>';
+      }
     }
     return '<span class="ng">' + esc(t) + '</span>';
   }
