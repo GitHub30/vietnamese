@@ -12,7 +12,6 @@
   --shadow: 0 12px 30px rgba(24, 32, 60, .10);
   --radius: 18px;
   --pad: clamp(16px, 3vw, 28px);   /* カードの内側余白 */
-  --foot-h: 38px;                  /* 固定フッターの高さ */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -56,8 +55,8 @@ html, body {
 .progress-bar { height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .4s ease; }
 
 /* ---------- カード ---------- */
-/* 下余白をフッターと同じにすると、最下部まで送っても入力欄の位置がずれない */
-.stage { padding: clamp(16px, 4vw, 36px) 16px var(--foot-h); display: flex; justify-content: center; }
+/* 下余白を 0 にすると、最下部まで送っても貼り付いた入力欄の位置がずれない */
+.stage { padding: clamp(16px, 4vw, 36px) 16px 0; display: flex; justify-content: center; }
 .card {
   width: min(720px, 100%);
   background: var(--bg-2);
@@ -117,13 +116,20 @@ html, body {
 .phrase .pending { color: var(--fg-dim); opacity: .55; }
 .phrase .ok { color: var(--ok); }
 .phrase .ng { color: var(--ng); text-decoration: underline wavy var(--ng) 1px; }
+/* 声調記号だけが違うとき: 文字全体を赤で描き、声調なしの文字を緑で重ねて記号だけ赤く見せる */
+.phrase .tone-ng { display: inline-block; position: relative; color: var(--ng); }
+.phrase .tone-ng::after {
+  content: attr(data-base);
+  position: absolute; left: 0; top: 0;
+  color: var(--ok);
+}
 .phrase.correct { color: var(--ok); }
 .phrase-ipa { text-align: center; color: var(--fg-dim); margin: 4px 0 0; }
 
 /* ---------- 入力 ---------- */
 /* スクロール中はフッターのすぐ上に貼り付き、カード末尾まで来ると本来の位置に戻る */
 .input-dock {
-  position: sticky; bottom: var(--foot-h); z-index: 15;
+  position: sticky; bottom: 0; z-index: 15;
   margin: 18px calc(-1 * var(--pad)) calc(-1 * var(--pad));
   padding: 10px var(--pad);
   border-radius: 0 0 var(--radius) var(--radius);
@@ -164,7 +170,8 @@ html, body {
 .telex-seq .done { color: var(--ok); font-weight: 700; }
 .telex-seq .rest { color: var(--fg-dim); }
 
-.input-status { min-height: 22px; font-size: 13px; color: var(--fg-dim); }
+.input-foot { display: flex; align-items: center; gap: 10px; }
+.input-status { flex: 1; min-width: 0; min-height: 22px; font-size: 13px; color: var(--fg-dim); }
 .input-status.is-ok { color: var(--ok); }
 .input-status.is-ng, .input-status.is-warn { color: var(--warn); }
 .input-status.is-listening { color: var(--ng); }
@@ -256,17 +263,6 @@ html, body {
 .check { display: flex; align-items: center; gap: 8px; font-size: 13px; }
 .check input { accent-color: var(--accent); width: 16px; height: 16px; }
 .sheet-actions { display: flex; justify-content: space-between; gap: 10px; margin-top: 6px; }
-
-/* ---------- フッター ---------- */
-.foot {
-  position: fixed; bottom: 0; left: 0; right: 0; height: var(--foot-h);
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  padding: 0 clamp(14px, 4vw, 32px);
-  font-size: 11px; color: var(--fg-dim); white-space: nowrap; overflow: hidden;
-  background: var(--bg-2); border-top: 1px solid var(--line);
-}
-.foot-right { display: flex; align-items: center; gap: 10px; }
-.compat { color: var(--warn); }
 
 @media (max-width: 560px) {
   .toasts { top: 12px; right: 12px; left: 12px; width: auto; }

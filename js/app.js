@@ -13,7 +13,7 @@
     ja: $('#ja'), words: $('#words'), note: $('#note'), breakdown: $('#breakdown'),
     toasts: $('#toasts'), card: $('#card'),
     progressBar: $('#progressBar'),
-    compat: $('#compat'), settings: $('#settings')
+    settings: $('#settings')
   };
 
   var DEFAULTS = {
@@ -364,12 +364,24 @@
     if (!state.revealed || !state.current) return;
     var target = state.current.vi, typed = el.answer.value, html = '';
     for (var i = 0; i < target.length; i++) {
-      var t = target[i], u = typed[i], cls = 'pending';
-      if (u !== undefined) cls = (u.toLowerCase() === t.toLowerCase()) ? 'ok' : 'ng';
-      html += '<span class="' + cls + '">' + esc(t) + '</span>';
+      html += diffChar(target[i], typed[i]);
     }
     if (typed.length > target.length) html += '<span class="ng">' + esc(typed.slice(target.length)) + '</span>';
     el.phrase.innerHTML = html;
+  }
+
+  /** 1文字ぶんの色分け。声調記号だけが違うときは、その記号だけを赤くする */
+  function diffChar(t, u) {
+    if (u === undefined) return '<span class="pending">' + esc(t) + '</span>';
+    if (u.toLowerCase() === t.toLowerCase()) return '<span class="ok">' + esc(t) + '</span>';
+
+    var dt = Telex.splitTone(t), du = Telex.splitTone(u);
+    if (dt.tone && dt.base.toLowerCase() === du.base.toLowerCase()) {
+      // 結合文字だけを別要素にしても Chrome は1つのグリフに合成して単色で描くため、
+      // 文字全体を赤で描いた上に「声調なしの文字」を緑で重ねて、記号だけ赤く見せる
+      return '<span class="tone-ng" data-base="' + esc(dt.base) + '">' + esc(t) + '</span>';
+    }
+    return '<span class="ng">' + esc(t) + '</span>';
   }
 
   function succeed(how) {
@@ -520,10 +532,9 @@
 
   /* ---------------- 起動 ---------------- */
   function compatNote() {
-    var msgs = [];
-    if (!Speech.ttsSupported) msgs.push('読み上げ非対応');
-    if (!Speech.srSupported) msgs.push('音声認識は Chrome / Edge のみ');
-    el.compat.textContent = msgs.join(' ・ ');
+    if (!Speech.ttsSupported) {
+      toast({ kind: 'info', icon: '🔈', title: '読み上げに非対応', body: 'このブラウザは音声合成に未対応です。表示と入力で練習できます。', duration: 6000 });
+    }
     if (!Speech.srSupported) {
       toast({ kind: 'info', icon: 'ℹ️', title: '音声認識について', body: 'このブラウザは音声認識に未対応です。キーボード入力で練習できます。', duration: 6000 });
     }
