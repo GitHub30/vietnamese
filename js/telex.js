@@ -80,6 +80,28 @@ window.Telex = (function () {
   }
 
   /**
+   * 1文字を「素の文字」「母音の記号」「声調記号」の3つに分ける
+   * 'ế' -> { letter: 'e', mod: '̂', tone: '́' }
+   * 'đ' -> { letter: 'd', mod: 'stroke', tone: '' }
+   */
+  function splitMarks(ch) {
+    var lower = (ch || '').toLowerCase();
+    if (lower === 'đ') return { letter: ch === 'đ' ? 'd' : 'D', mod: 'stroke', tone: '' };
+    var d = (ch || '').normalize('NFD'), letter = d.charAt(0), mod = '', tone = '';
+    for (var i = 1; i < d.length; i++) {
+      if (TONE[d[i]]) tone = d[i];
+      else mod = d[i];   // 山形・半月・角
+    }
+    return { letter: letter, mod: mod, tone: tone };
+  }
+
+  /** 素の文字に母音の記号だけを戻した文字（声調は付けない） */
+  function letterWithMod(parts) {
+    if (parts.mod === 'stroke') return parts.letter === 'D' ? 'Đ' : 'đ';
+    return (parts.letter + parts.mod).normalize('NFC');
+  }
+
+  /**
    * 1文字を「声調記号を除いた文字」と「声調記号」に分ける
    * 'ấ' -> { base: 'â', tone: '́' }
    */
@@ -247,6 +269,8 @@ window.Telex = (function () {
     sequence: sequence,
     typingKeys: typingKeys,
     splitTone: splitTone,
+    splitMarks: splitMarks,
+    letterWithMod: letterWithMod,
     commonPrefixLength: commonPrefixLength,
     type: type,
     normalize: normalize,

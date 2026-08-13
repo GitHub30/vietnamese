@@ -119,9 +119,9 @@ html, body {
 .phrase .pending { color: var(--fg-dim); opacity: .55; }
 .phrase .ok { color: var(--ok); }
 .phrase .ng { color: var(--ng); text-decoration: underline wavy var(--ng) 1px; }
-/* 声調記号だけが違うとき: 文字全体を赤で描き、声調なしの文字を緑で重ねて記号だけ赤く見せる */
-.phrase .tone-ng { display: inline-block; position: relative; color: var(--ng); }
-.phrase .tone-ng::after {
+/* 記号だけが違うとき: 文字全体を赤で描き、合っている部分を緑で重ねて記号だけ赤く見せる */
+.phrase .mark-ng { display: inline-block; position: relative; color: var(--ng); }
+.phrase .mark-ng::after {
   content: attr(data-base);
   position: absolute; left: 0; top: 0;
   color: var(--ok);
