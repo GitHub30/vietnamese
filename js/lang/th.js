@@ -65,6 +65,7 @@ I18N.register('th', {
     ttsOffBody: 'เบราว์เซอร์นี้ไม่รองรับการสังเคราะห์เสียง แต่ยังฝึกอ่านและพิมพ์ได้',
     noVoiceTitle: 'ยังไม่ได้ติดตั้งเสียงภาษาเวียดนาม',
     noVoiceBody: 'เพิ่มภาษาเวียดนามในการตั้งค่าเสียงของระบบ แล้วจะอ่านออกเสียงได้',
+    noVoiceWin: 'บน Windows: กด Win + X แล้ว A เพื่อเปิดเทอร์มินัลแบบผู้ดูแลระบบ รันคำสั่ง  Add-WindowsCapability -Online -Name "Language.TextToSpeech~~~vi-VN~0.0.1.0"  แล้วรีสตาร์ตเครื่อง',
     micDeniedTitle: 'ใช้ไมโครโฟนไม่ได้',
     micDeniedBody: 'ตรวจสอบการอนุญาตไมโครโฟนในเบราว์เซอร์',
     doneTitle: 'Chúc mừng!',

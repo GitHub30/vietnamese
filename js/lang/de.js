@@ -65,6 +65,7 @@ I18N.register('de', {
     ttsOffBody: 'Dieser Browser kann nicht vorlesen. Lesen und Tippen funktionieren weiterhin.',
     noVoiceTitle: 'Keine vietnamesische Stimme installiert',
     noVoiceBody: 'Füge Vietnamesisch in den Sprachausgabe-Einstellungen des Systems hinzu, um das Vorlesen zu aktivieren.',
+    noVoiceWin: 'Unter Windows: Win + X und dann A drücken, um das Terminal als Administrator zu öffnen, dann  Add-WindowsCapability -Online -Name "Language.TextToSpeech~~~vi-VN~0.0.1.0"  ausführen und den PC neu starten.',
     micDeniedTitle: 'Mikrofon nicht verfügbar',
     micDeniedBody: 'Prüfe die Mikrofonberechtigung im Browser.',
     doneTitle: 'Chúc mừng!',

@@ -65,6 +65,7 @@ I18N.register('fr', {
     ttsOffBody: 'Ce navigateur ne peut pas lire à voix haute. Vous pouvez vous entraîner en lisant et en tapant.',
     noVoiceTitle: 'Aucune voix vietnamienne installée',
     noVoiceBody: 'Ajoutez le vietnamien dans les réglages vocaux du système pour activer la lecture.',
+    noVoiceWin: 'Sous Windows : appuyez sur Win + X puis A pour ouvrir le terminal en administrateur, lancez  Add-WindowsCapability -Online -Name "Language.TextToSpeech~~~vi-VN~0.0.1.0"  puis redemarrez le PC.',
     micDeniedTitle: 'Micro indisponible',
     micDeniedBody: 'Vérifiez l’autorisation du micro dans le navigateur.',
     doneTitle: 'Chúc mừng !',

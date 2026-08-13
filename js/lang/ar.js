@@ -65,6 +65,7 @@ I18N.register('ar', {
     ttsOffBody: 'هذا المتصفح لا يستطيع القراءة بصوت عالٍ. يمكنك التدرّب بالقراءة والكتابة.',
     noVoiceTitle: 'لا يوجد صوت فيتنامي مثبَّت',
     noVoiceBody: 'أضف الفيتنامية في إعدادات الصوت بنظام التشغيل لتفعيل القراءة.',
+    noVoiceWin: 'على Windows: اضغط Win + X ثم A لفتح الطرفية كمسؤول، ونفّذ  ⁦Add-WindowsCapability -Online -Name "Language.TextToSpeech~~~vi-VN~0.0.1.0"⁩  ثم أعد تشغيل الجهاز.',
     micDeniedTitle: 'الميكروفون غير متاح',
     micDeniedBody: 'تحقّق من إذن الميكروفون في المتصفح.',
     doneTitle: 'Chúc mừng!',

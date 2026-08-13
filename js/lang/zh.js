@@ -65,6 +65,7 @@ I18N.register('zh', {
     ttsOffBody: '此浏览器不支持语音合成。仍然可以看着句子输入练习。',
     noVoiceTitle: '尚未安装越南语语音',
     noVoiceBody: '在系统语音设置中添加越南语后即可朗读。',
+    noVoiceWin: '在 Windows 上：按 Win + X 再按 A 以管理员身份打开终端，执行  Add-WindowsCapability -Online -Name "Language.TextToSpeech~~~vi-VN~0.0.1.0"  然后重启电脑。',
     micDeniedTitle: '无法使用麦克风',
     micDeniedBody: '请检查浏览器的麦克风权限。',
     doneTitle: 'Chúc mừng!',
