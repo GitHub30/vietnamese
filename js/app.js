@@ -9,6 +9,7 @@
     recall: $('#recall'), recallCount: $('#recallCount'), ringFg: $('#ringFg'),
     phrase: $('#phrase'),
     answer: $('#answer'), inputStatus: $('#inputStatus'), mic: $('#btnMic'),
+    telexHint: $('#telexHint'), telexChips: $('#telexChips'),
     ja: $('#ja'), words: $('#words'), note: $('#note'), breakdown: $('#breakdown'),
     toasts: $('#toasts'), card: $('#card'),
     progressBar: $('#progressBar'),
@@ -123,6 +124,7 @@
     el.phrase.textContent = '';
     el.phrase.classList.remove('correct');
     el.breakdown.classList.add('blurred');
+    hideTelexHint();
     el.recall.hidden = false;
   }
 
@@ -180,27 +182,27 @@
     var revealAt = hasMarks ? Math.max(delayMs, 1800) : delayMs;
 
     // ダイアクリティカルマークがある場合は「表示の直前」に TELEX ヒントを出す
-    if (hasMarks) later(function () { showTelexToast(p.vi); }, Math.max(0, revealAt - 1600));
+    if (hasMarks) later(function () { showTelexHint(p.vi); }, Math.max(0, revealAt - 1600));
 
     if (revealAt <= 0) reveal();
     else startCountdown(revealAt, reveal);
   }
 
-  function showTelexToast(vi) {
+  /** 入力欄の下に TELEX の打ち方を並べる（次のフレーズに変わるまで出しっぱなし） */
+  function showTelexHint(vi) {
     state.hintShown = true;
     var hints = Telex.hints(vi);
-    var chips = hints.map(function (h) {
+    if (!hints.length) { hideTelexHint(); return; }
+    el.telexChips.innerHTML = hints.map(function (h) {
       return '<span class="chip"><b>' + esc(h.char) + '</b><span class="chip-arrow">→</span><code>' +
              esc(h.keys) + '</code></span>';
     }).join('');
-    toast({
-      kind: 'telex',
-      icon: '⌨️',
-      title: 'TELEX ヒント',
-      html: '<div class="chips">' + chips + '</div>' +
-            '<div class="toast-foot">この後に出るフレーズには声調記号が含まれます</div>',
-      duration: 6500
-    });
+    el.telexHint.hidden = false;
+  }
+
+  function hideTelexHint() {
+    el.telexHint.hidden = true;
+    el.telexChips.innerHTML = '';
   }
 
   function reveal() {
@@ -209,7 +211,7 @@
     clearTimers();
 
     // 早送りで表示した場合もヒントは必ず出す
-    if (!state.hintShown && Telex.hasDiacritics(state.current.vi)) showTelexToast(state.current.vi);
+    if (!state.hintShown && Telex.hasDiacritics(state.current.vi)) showTelexHint(state.current.vi);
 
     el.recall.hidden = true;
     el.phrase.hidden = false;
@@ -393,11 +395,11 @@
   function skip() {
     if (!state.current || state.busy) return;
     state.missed = true;
-    if (!state.revealed) { clearTimers(); reveal(); return; }
     state.busy = true;
     clearTimers();
     Speech.stopListening(); setMic(false);
-    toast({ kind: 'info', icon: '⏭', title: 'スキップしました', body: state.current.vi, duration: 2600 });
+    // まだ伏せたままでも答えを見せてから次へ送る
+    toast({ kind: 'info', icon: '⏭', title: 'スキップしました', body: state.current.vi + ' — ' + state.current.ja, duration: 3200 });
     later(function () {
       // 後ろに回して復習する
       state.queue.push(state.queue[state.idx]);
@@ -431,16 +433,11 @@
     if (settings.telex && !e.isComposing) applyTelex(e);
     onInput();
   });
+  // 正解は入力した時点で自動判定されるので、Enter はスキップに割り当てる
   el.answer.addEventListener('keydown', function (e) {
     if (e.key !== 'Enter') return;
     e.preventDefault();
-    if (state.busy || !state.current) return;
-    if (isCorrect(el.answer.value)) { succeed('type'); return; }
-    if (!state.revealed) { clearTimers(); reveal(); return; }
-    state.missed = true;
-    el.card.classList.add('shake');
-    setTimeout(function () { el.card.classList.remove('shake'); }, 400);
-    setStatus('warn', 'まだ違います。赤い文字を直してみましょう');
+    skip();
   });
 
   $('#btnRevealNow').addEventListener('click', function () { clearTimers(); reveal(); el.answer.focus(); });
@@ -449,8 +446,12 @@
     else startListening();
   });
 
+  // 入力欄の外にフォーカスがあるときも Enter でスキップできるようにする
   document.addEventListener('keydown', function (e) {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); skip(); }
+    if (e.key !== 'Enter' || e.target === el.answer) return;
+    if (el.settings.open || !document.getElementById('gate').hidden) return; // 設定・起動ゲートを開いている間は無効
+    e.preventDefault();
+    skip();
   });
 
   /* ---------------- 設定ダイアログ ---------------- */

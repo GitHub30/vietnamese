@@ -67,10 +67,6 @@ html, body {
   padding: var(--pad);
 }
 .card.success { box-shadow: 0 0 0 3px rgba(18, 163, 124, .35), var(--shadow); }
-.card.shake { animation: shake .35s; }
-@keyframes shake {
-  25% { transform: translateX(-6px); } 50% { transform: translateX(6px); } 75% { transform: translateX(-3px); }
-}
 
 /* ---------- イメージ画像 ---------- */
 .art { margin: 0 0 18px; }
@@ -149,6 +145,28 @@ html, body {
 .mic-btn.on { border-color: var(--ng); animation: pulse 1.2s infinite; }
 @keyframes pulse { 50% { box-shadow: 0 0 0 8px rgba(224, 57, 62, .15); } }
 
+/* 入力欄の下に出す TELEX の打ち方 */
+.telex-hint {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin-top: 8px; animation: hintin .25s ease;
+}
+@keyframes hintin { from { opacity: 0; transform: translateY(-4px); } }
+.telex-hint-label {
+  font-size: 10px; letter-spacing: .1em; color: var(--fg-dim);
+  border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px;
+}
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; background: var(--bg); font-size: 13px;
+}
+.chip b { font-size: 16px; color: var(--fg); }
+.chip-arrow { color: var(--fg-dim); font-size: 11px; }
+.chip code {
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  background: var(--bg-2); border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; color: var(--accent);
+}
+
 .input-status { min-height: 22px; font-size: 13px; color: var(--fg-dim); }
 .input-status.is-ok { color: var(--ok); }
 .input-status.is-ng, .input-status.is-warn { color: var(--warn); }
@@ -196,7 +214,6 @@ html, body {
 }
 .toast.out { opacity: 0; transform: translateX(20px); }
 @keyframes slidein { from { opacity: 0; transform: translateX(24px); } }
-.toast-telex { border-left-color: var(--accent-2); }
 .toast-success { border-left-color: var(--ok); }
 .toast-error { border-left-color: var(--ng); }
 .toast-info { border-left-color: #4a6cf7; }
@@ -205,18 +222,6 @@ html, body {
 .toast-title { font-weight: 700; font-size: 14px; }
 .toast-body { font-size: 13px; color: var(--fg-dim); margin-top: 6px; }
 .toast-foot { font-size: 11px; color: var(--fg-dim); margin-top: 8px; }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip {
-  display: inline-flex; align-items: center; gap: 5px;
-  border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; background: var(--bg); font-size: 13px;
-}
-.chip b { font-size: 16px; color: var(--fg); }
-.chip-arrow { color: var(--fg-dim); font-size: 11px; }
-.chip code, .seq {
-  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
-  background: var(--bg-2); border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; color: var(--accent);
-}
-.seq { display: block; margin-top: 6px; padding: 8px 10px; font-size: 13px; word-break: break-all; }
 
 /* ---------- 起動ゲート ---------- */
 .gate {
