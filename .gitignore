@@ -1,0 +1,6 @@
+# ローカル環境固有の設定
+.claude/settings.local.json
+
+# OS / エディタ
+.DS_Store
+Thumbs.db
