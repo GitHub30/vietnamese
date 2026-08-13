@@ -11,7 +11,7 @@
     answer: $('#answer'), inputStatus: $('#inputStatus'), mic: $('#btnMic'),
     ja: $('#ja'), words: $('#words'), note: $('#note'), breakdown: $('#breakdown'),
     toasts: $('#toasts'), card: $('#card'),
-    progressBar: $('#progressBar'), statProgress: $('#statProgress'), statAccuracy: $('#statAccuracy'),
+    progressBar: $('#progressBar'),
     compat: $('#compat'), settings: $('#settings')
   };
 
@@ -23,6 +23,7 @@
     autoListen: true,
     voiceAdvance: true,
     shuffle: true,
+    telex: true,       // UniKey が無くても打てるよう TELEX を自動変換する
     voiceURI: ''
   };
 
@@ -30,7 +31,8 @@
   var state = {
     queue: [], idx: 0, current: null,
     revealed: false, solved: 0, perfect: 0, missed: false, hintShown: false,
-    timers: [], raf: 0, busy: false, voiceTries: 0
+    timers: [], raf: 0, busy: false, voiceTries: 0,
+    raw: ''            // TELEX 変換前の打鍵列
   };
 
   /* ---------------- 設定の保存 ---------------- */
@@ -126,9 +128,11 @@
 
   function renderStats() {
     var total = state.queue.length;
-    el.statProgress.textContent = state.solved + ' / ' + total;
-    el.statAccuracy.textContent = state.solved ? Math.round(state.perfect / state.solved * 100) + '%' : '–';
     el.progressBar.style.width = (total ? (state.solved / total * 100) : 0) + '%';
+  }
+
+  function accuracyText() {
+    return state.solved ? Math.round(state.perfect / state.solved * 100) + '%' : '–';
   }
 
   /* ---------------- カウントダウン ---------------- */
@@ -164,7 +168,7 @@
     state.voiceTries = 0;
     state.busy = false;
 
-    el.answer.value = '';
+    setAnswer('');
     el.answer.disabled = false;
     el.answer.focus();
     setStatus('', '');
@@ -250,8 +254,12 @@
     }
     Speech.cancel();
     Speech.listen({
-      onstart: function () { setMic(true); setStatus('listening', '🎙️ 聞いています… ベトナム語で話してみてください'); },
-      oninterim: function (text) { el.answer.value = text; renderDiff(); setStatus('listening', '🎙️ ' + text); },
+      onstart: function () {
+        if (state.busy) { Speech.stopListening(); return; } // 開始前に正解していたら何もしない
+        setMic(true);
+        setStatus('listening', '🎙️ 聞いています… ベトナム語で話してみてください');
+      },
+      oninterim: function (text) { setAnswer(text); renderDiff(); setStatus('listening', '🎙️ ' + text); },
       onfinal: function (alts) { handleVoice(alts); },
       onend: function () { setMic(false); },
       onerror: function (err) {
@@ -272,7 +280,7 @@
       if (!loose && Telex.stripDiacritics(a) === Telex.stripDiacritics(target)) loose = a;
     });
 
-    el.answer.value = exact || loose || alts[0];
+    setAnswer(exact || loose || alts[0]);
     state.voiceTries++;
 
     if (exact) {
@@ -288,6 +296,37 @@
       setStatus('warn', '「' + alts[0] + '」と聞こえました。🎤 でもう一度どうぞ');
     }
     renderDiff();
+  }
+
+  /* ---------------- TELEX 自動変換 ---------------- */
+  /** 入力欄の値を差し替える（音声認識やリセットからも使う） */
+  function setAnswer(text) {
+    el.answer.value = text;
+    state.raw = text;
+  }
+
+  /**
+   * 末尾への1文字入力だけを打鍵列として積み上げ、そこから綴りを組み立て直す。
+   * 貼り付け・削除・カーソル移動があったときは、その時点の表示内容を打鍵列として取り直す
+   * （変換済みの文字も解釈できるので、続けて声調キーを打てる）。
+   */
+  function applyTelex(e) {
+    var v = el.answer.value;
+    // 削除・貼り付け・カーソル移動のあとは、そのときの表示を打鍵列として取り直すだけ
+    if (e.inputType !== 'insertText' || !e.data || el.answer.selectionStart !== v.length) {
+      state.raw = v;
+      return;
+    }
+    // 直前の表示に足しただけなら打鍵列を伸ばす。
+    // そうでなければ（選択を置き換えた等）新しい内容を打鍵列として取り直す。
+    var prev = Telex.type(state.raw);
+    state.raw = (v === prev + e.data) ? state.raw + e.data : v;
+
+    var out = Telex.type(state.raw);
+    if (out !== v) {
+      el.answer.value = out;
+      el.answer.setSelectionRange(out.length, out.length);
+    }
   }
 
   /* ---------------- 入力判定 ---------------- */
@@ -374,7 +413,7 @@
     el.phrase.textContent = 'Hoàn thành! 🎉';
     el.ja.textContent = '全フレーズ終了！おつかれさまでした。';
     el.words.innerHTML = '';
-    el.note.textContent = '正確さ ' + el.statAccuracy.textContent + '（' + state.perfect + ' / ' + state.solved + ' がノーミス）';
+    el.note.textContent = '正確さ ' + accuracyText() + '（' + state.perfect + ' / ' + state.solved + ' がノーミス）';
     el.breakdown.classList.remove('blurred');
     el.answer.disabled = true;
     setStatus('ok', 'もう一周する場合は ⚙️ 設定の「学習状況をリセット」からどうぞ');
@@ -387,7 +426,11 @@
   }
 
   /* ---------------- イベント ---------------- */
-  el.answer.addEventListener('input', onInput);
+  el.answer.addEventListener('input', function (e) {
+    // 日本語などの IME 変換中は触らない
+    if (settings.telex && !e.isComposing) applyTelex(e);
+    onInput();
+  });
   el.answer.addEventListener('keydown', function (e) {
     if (e.key !== 'Enter') return;
     e.preventDefault();
@@ -401,33 +444,6 @@
   });
 
   $('#btnRevealNow').addEventListener('click', function () { clearTimers(); reveal(); el.answer.focus(); });
-  $('#btnSpeak').addEventListener('click', function () {
-    if (!state.current) return;
-    Speech.stopListening(); setMic(false);
-    if (!state.revealed) reveal();
-    else Speech.speak(state.current.vi, settings.rate1);
-  });
-  $('#btnSlow').addEventListener('click', function () {
-    if (!state.current) return;
-    Speech.stopListening(); setMic(false);
-    Speech.speak(state.current.vi, settings.rate2);
-  });
-  $('#btnHint').addEventListener('click', function () {
-    if (!state.current) return;
-    var vi = state.current.vi;
-    if (!Telex.hasDiacritics(vi)) {
-      toast({ kind: 'telex', icon: '⌨️', title: 'TELEX ヒント', body: 'このフレーズに声調記号はありません。そのまま打てます。' });
-      return;
-    }
-    showTelexToast(vi);
-    toast({
-      kind: 'telex', icon: '⌨️', title: '打鍵の並び',
-      html: '<code class="seq">' + esc(Telex.sequence(vi)) + '</code>' +
-            '<div class="toast-foot">TELEX入力ならこの通りに打つとフレーズになります</div>',
-      duration: 8000
-    });
-  });
-  $('#btnSkip').addEventListener('click', skip);
   el.mic.addEventListener('click', function () {
     if (Speech.isListening()) { Speech.stopListening(); setMic(false); setStatus('', ''); }
     else startListening();
@@ -440,7 +456,8 @@
   /* ---------------- 設定ダイアログ ---------------- */
   var setDelay = $('#setDelay'), setRate1 = $('#setRate1'), setRate2 = $('#setRate2'),
       setAutoSpeak = $('#setAutoSpeak'), setAutoListen = $('#setAutoListen'),
-      setVoiceAdvance = $('#setVoiceAdvance'), setShuffle = $('#setShuffle'), setVoice = $('#setVoice');
+      setVoiceAdvance = $('#setVoiceAdvance'), setShuffle = $('#setShuffle'),
+      setTelex = $('#setTelex'), setVoice = $('#setVoice');
 
   function syncSettingsUI() {
     setDelay.value = settings.delay;
@@ -450,6 +467,7 @@
     setAutoListen.checked = settings.autoListen;
     setVoiceAdvance.checked = settings.voiceAdvance;
     setShuffle.checked = settings.shuffle;
+    setTelex.checked = settings.telex;
     $('#lblDelay').textContent = settings.delay + ' 秒';
     $('#lblRate1').textContent = '×' + Number(settings.rate1).toFixed(2);
     $('#lblRate2').textContent = '×' + Number(settings.rate2).toFixed(2);
@@ -465,8 +483,8 @@
   bindRange(setRate1, 'rate1');
   bindRange(setRate2, 'rate2');
 
-  [[setAutoSpeak, 'autoSpeak'], [setAutoListen, 'autoListen'],
-   [setVoiceAdvance, 'voiceAdvance'], [setShuffle, 'shuffle']].forEach(function (pair) {
+  [[setAutoSpeak, 'autoSpeak'], [setAutoListen, 'autoListen'], [setVoiceAdvance, 'voiceAdvance'],
+   [setShuffle, 'shuffle'], [setTelex, 'telex']].forEach(function (pair) {
     pair[0].addEventListener('change', function () { settings[pair[1]] = pair[0].checked; save(); });
   });
 
