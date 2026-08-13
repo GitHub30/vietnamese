@@ -155,17 +155,14 @@ html, body {
   font-size: 10px; letter-spacing: .1em; color: var(--fg-dim);
   border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px;
 }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip {
-  display: inline-flex; align-items: center; gap: 5px;
-  border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; background: var(--bg); font-size: 13px;
+.telex-seq {
+  flex: 1; min-width: 0;
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 14px; letter-spacing: .02em;
+  background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 4px 10px;
+  white-space: pre-wrap; word-break: break-word;
 }
-.chip b { font-size: 16px; color: var(--fg); }
-.chip-arrow { color: var(--fg-dim); font-size: 11px; }
-.chip code {
-  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
-  background: var(--bg-2); border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; color: var(--accent);
-}
+.telex-seq .done { color: var(--ok); font-weight: 700; }
+.telex-seq .rest { color: var(--fg-dim); }
 
 .input-status { min-height: 22px; font-size: 13px; color: var(--fg-dim); }
 .input-status.is-ok { color: var(--ok); }

@@ -47,21 +47,7 @@ window.Telex = (function () {
     return false;
   }
 
-  /** 文字列に出てくる装飾文字を重複なしで返す [{char, keys, note}] */
-  function hints(str) {
-    var seen = Object.create(null), out = [];
-    for (var i = 0; i < str.length; i++) {
-      var ch = str[i];
-      if (seen[ch]) continue;
-      var t = forChar(ch);
-      if (!t) continue;
-      seen[ch] = true;
-      out.push({ char: ch, keys: t.keys, note: t.note });
-    }
-    return out;
-  }
-
-  /** フレーズ全体を TELEX の打鍵列に変換 */
+  /** フレーズ全体を TELEX の打鍵列に変換（記号は文字の直後） */
   function sequence(str) {
     var out = '';
     for (var i = 0; i < str.length; i++) {
@@ -69,6 +55,33 @@ window.Telex = (function () {
       out += t ? t.keys : str[i];
     }
     return out;
+  }
+
+  /**
+   * 実際の打ち方に近い打鍵列（声調キーは語の最後にまとめる）
+   * 例: 'tiếng Việt' -> 'tieengs Vieetj'
+   */
+  function typingKeys(str) {
+    var out = '', word = '', tone = '';
+    function flush() { out += word + tone; word = ''; tone = ''; }
+    for (var i = 0; i < str.length; i++) {
+      var c = str[i];
+      if (!isWordChar(c)) { flush(); out += c; continue; }
+      var t = forChar(c);
+      if (!t) { word += c; continue; }
+      var keys = t.keys, last = keys.charAt(keys.length - 1);
+      if (keys.length > 1 && 'sfrxj'.indexOf(last) >= 0) { tone = last; keys = keys.slice(0, -1); }
+      word += keys;
+    }
+    flush();
+    return out;
+  }
+
+  /** 2つの打鍵列の一致している先頭文字数（大文字小文字は区別しない） */
+  function commonPrefixLength(a, b) {
+    var n = Math.min(a.length, b.length), i = 0;
+    while (i < n && a.charAt(i).toLowerCase() === b.charAt(i).toLowerCase()) i++;
+    return i;
   }
 
   /* ============================================================
@@ -216,8 +229,9 @@ window.Telex = (function () {
   return {
     forChar: forChar,
     hasDiacritics: hasDiacritics,
-    hints: hints,
     sequence: sequence,
+    typingKeys: typingKeys,
+    commonPrefixLength: commonPrefixLength,
     type: type,
     normalize: normalize,
     stripDiacritics: stripDiacritics
