@@ -531,6 +531,27 @@
   /* ---------------- 表示言語 ---------------- */
   var langSelects = [$('#gateLang'), $('#setLangSelect')];
 
+  var SITE = 'https://hocviet.vn/';
+  var OG_LOCALE = {
+    en: 'en_US', es: 'es_ES', pt: 'pt_BR', fr: 'fr_FR', de: 'de_DE', ja: 'ja_JP',
+    id: 'id_ID', ko: 'ko_KR', th: 'th_TH', ar: 'ar_AR', zh: 'zh_CN'
+  };
+
+  /** ?lang=xx で言語を指定できる（リンクを共有したときに同じ言語で開ける） */
+  function langFromUrl() {
+    var m = /[?&]lang=([A-Za-z-]+)/.exec(location.search);
+    return m ? m[1].toLowerCase().split('-')[0] : '';
+  }
+
+  /** 言語ごとに canonical と og:url / og:locale を差し替える */
+  function updateSeoTags(code) {
+    var url = SITE + '?lang=' + code;
+    var canonical = $('#canonical'), ogUrl = $('#ogUrl'), ogLocale = $('#ogLocale');
+    if (canonical) canonical.setAttribute('href', url);
+    if (ogUrl) ogUrl.setAttribute('content', url);
+    if (ogLocale) ogLocale.setAttribute('content', OG_LOCALE[code] || OG_LOCALE.en);
+  }
+
   function fillLangSelects() {
     var options = I18N.LANGS.map(function (l) {
       return '<option value="' + esc(l.code) + '">' + esc(l.name) + '</option>';
@@ -545,7 +566,11 @@
   function changeLang(code) {
     settings.lang = code;
     save();
-    I18N.use(code, applyLanguage);
+    I18N.use(code, function () {
+      // 共有できるよう URL にも残す
+      if (window.history && history.replaceState) history.replaceState(null, '', '?lang=' + code);
+      applyLanguage();
+    });
   }
 
   langSelects.forEach(function (sel) {
@@ -555,6 +580,7 @@
   /** 言語切り替え後の描き直し（出題の進行はそのまま） */
   function applyLanguage() {
     I18N.apply();
+    updateSeoTags(I18N.current());
     fillLangSelects();
     syncSettingsUI();
     renderVoiceSelect();
@@ -620,9 +646,11 @@
     nextCard();
   });
 
-  // 言語パックを読み込んでから描画する（未設定ならブラウザの言語設定から判定）
-  I18N.use(settings.lang || I18N.detect(), function (code) {
-    if (!settings.lang) settings.lang = code;
+  // 言語パックを読み込んでから描画する
+  // 優先順位: URL の ?lang= → 保存済みの設定 → ブラウザの言語設定
+  var urlLang = langFromUrl();
+  I18N.use(urlLang || settings.lang || I18N.detect(), function (code) {
+    if (urlLang || !settings.lang) { settings.lang = code; save(); }
     buildQueue();
     renderStats();
     renderCard(state.queue[0]);
