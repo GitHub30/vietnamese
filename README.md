@@ -174,12 +174,14 @@ git add -A && git commit -m "Add Vietnamese typing drill app" && git push -u ori
 - 画面の文言は JS で差し替える前提ですが、**HTML にも英語の既定テキストを書いてあります**。JS を実行しないクローラでも見出し・手順・説明が読めます
 - `<noscript>` に全20フレーズ（訳と打鍵列つき）を出力。JS 無しでも中身が分かります
 - `robots.txt` と `sitemap.xml`（言語別 URL に `xhtml:link` の hreflang 付き）を同梱
+- `404.html` は `noindex` を付けたうえでトップへリダイレクト（`?lang=` は引き継ぎます）
 
 ## ファイル構成
 
 ```
 index.html      画面の構造
 styles.css      スタイル（ライト / ダークモード対応）
+404.html        存在しないパスからトップへ飛ばす（GitHub Pages が返す 404 ページ）
 robots.txt      クローラ向けの設定
 sitemap.xml     言語別 URL のサイトマップ
 js/i18n.js      言語の判定・切り替え・言語パックの読み込み

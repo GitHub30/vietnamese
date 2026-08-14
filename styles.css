@@ -57,6 +57,12 @@ html, body {
 .progress-track { height: 4px; background: var(--line); position: sticky; top: 0; z-index: 19; }
 .progress-bar { height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .4s ease; }
 
+/* 404 ページ（すぐトップへ飛ぶので、ちらっと見えるだけ） */
+.notfound { text-align: center; margin-top: 10vh; }
+.notfound h1 { font-size: 20px; margin: 12px 0 8px; }
+.notfound p { margin: 6px 0; color: var(--fg-dim); font-size: 14px; }
+.notfound a { text-decoration: none; display: inline-block; margin-top: 10px; }
+
 /* JS 無しのときだけ表示される案内 */
 .noscript {
   max-width: 720px; margin: 0 auto; padding: 24px 16px;

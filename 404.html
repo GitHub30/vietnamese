@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, follow">
+<title>Redirecting to Tiếng Việt Drill</title>
+<link rel="canonical" href="https://hocviet.vn/">
+<!-- JS が無くてもトップへ飛ばす（JS があれば下のスクリプトが即座に飛ばす） -->
+<meta http-equiv="refresh" content="0; url=/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23da251d'/><text x='50' y='72' font-size='72' text-anchor='middle' fill='%23ffcd00'>★</text></svg>">
+<link rel="stylesheet" href="styles.css">
+<script>
+  // ?lang= などのクエリは引き継ぐ。replace なので戻るボタンでループしない
+  location.replace('/' + (location.search || ''));
+</script>
+</head>
+<body>
+
+<main class="stage">
+  <section class="card notfound">
+    <span class="flag gate-mark" aria-hidden="true">★</span>
+    <h1>Page not found</h1>
+    <p>Taking you to <b lang="vi">Tiếng Việt Drill</b>…</p>
+    <p><a class="ghost-btn" href="/">Go to the drill</a></p>
+  </section>
+</main>
+
+</body>
+</html>
