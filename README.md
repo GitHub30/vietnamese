@@ -57,6 +57,7 @@ dduwowcj          →  được
 - アラビア語では `dir="rtl"` に切り替わります。ベトナム語のフレーズ・入力欄・TELEX ヒントは常に左から右のままです
 - 翻訳は**ベトナム語のフレーズそのものをキー**にして引きます。訳・場面・文法説明・品詞ラベル・語ごとの意味と補足がすべて言語ごとに用意されています
 - 言語ファイルは必要になったときに読み込みます（起動時は英語＋選択中の言語のみ）
+- `?lang=fr` のように URL で言語を指定できます（保存値やブラウザ設定より優先され、そのまま共有できます）
 
 ## TELEX 早見表
 
@@ -103,7 +104,24 @@ git add -A && git commit -m "Add Vietnamese typing drill app" && git push -u ori
 
 > Actions を使わず「Deploy from a branch」を選ぶ場合も、`main` / `root` を指定すればそのまま公開できます（`.nojekyll` を置いてあるので Jekyll の処理は入りません）。
 
-公開 URL は `https://<ユーザー名>.github.io/<リポジトリ名>/` です。相対パスのみを使っているので、サブディレクトリ配信でも設定変更は不要です。
+公開 URL は **https://hocviet.vn/** です（`CNAME` に独自ドメインを記載）。相対パスのみを使っているので、配信先が変わっても設定変更は不要です。
+
+### 独自ドメインの設定
+
+1. リポジトリ直下の `CNAME`（中身は `hocviet.vn`）が公開先に含まれること
+2. DNS に Apex ドメイン用の A レコードを4本（GitHub Pages の IP）
+
+   ```
+   185.199.108.153
+   185.199.109.153
+   185.199.110.153
+   185.199.111.153
+   ```
+
+   IPv6 も使う場合は AAAA レコードを 4 本（`2606:50c0:8000::153` 〜 `2606:50c0:8003::153`）。`www` も使うなら CNAME で `<ユーザー名>.github.io.` を向けます。
+3. GitHub の **Settings → Pages → Custom domain** に `hocviet.vn` を入力し、DNS が伝播したら **Enforce HTTPS** にチェック
+
+ドメインを変えるときは `CNAME`・`index.html`（canonical / og:url / hreflang / JSON-LD）・`robots.txt`・`sitemap.xml`・`js/app.js` の `SITE` を差し替えます。
 
 ## フレーズを追加する
 
@@ -148,11 +166,22 @@ git add -A && git commit -m "Add Vietnamese typing drill app" && git push -u ori
 2. `js/i18n.js` の `LANGS` に `{ code: '<コード>', name: '<自言語での言語名>' }` を追加する
 3. 右から左に書く言語なら `js/i18n.js` の `dir()` に条件を足す
 
+## SEO まわり
+
+- `<title>` / `description` / canonical / Open Graph / Twitter Card / `theme-color` を設定
+- 11言語ぶんの `hreflang`（＋ `x-default`）を `?lang=xx` の URL で宣言。canonical・`og:url`・`og:locale` は表示中の言語に合わせて書き換わります
+- 構造化データ（JSON-LD の `WebApplication`）で、無料・対応言語・学習内容・リポジトリを明示
+- 画面の文言は JS で差し替える前提ですが、**HTML にも英語の既定テキストを書いてあります**。JS を実行しないクローラでも見出し・手順・説明が読めます
+- `<noscript>` に全20フレーズ（訳と打鍵列つき）を出力。JS 無しでも中身が分かります
+- `robots.txt` と `sitemap.xml`（言語別 URL に `xhtml:link` の hreflang 付き）を同梱
+
 ## ファイル構成
 
 ```
 index.html      画面の構造
 styles.css      スタイル（ライト / ダークモード対応）
+robots.txt      クローラ向けの設定
+sitemap.xml     言語別 URL のサイトマップ
 js/i18n.js      言語の判定・切り替え・言語パックの読み込み
 js/lang/*.js    各言語の UI 文言と訳（フレーズをキーにした 11 ファイル）
 js/telex.js     TELEX 入力エンジン（打鍵列 → 綴り）、ヒント生成、比較用の正規化
