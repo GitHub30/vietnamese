@@ -78,7 +78,7 @@ html, body {
 
 /* ---------- カード ---------- */
 /* 下余白を 0 にすると、最下部まで送っても貼り付いた入力欄の位置がずれない */
-.stage { padding: clamp(16px, 4vw, 36px) 16px 0; display: flex; justify-content: center; }
+.stage { padding: 0 16px; display: flex; justify-content: center; }
 .card {
   width: min(720px, 100%);
   background: var(--bg-2);
