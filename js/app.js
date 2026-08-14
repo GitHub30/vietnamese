@@ -5,7 +5,7 @@
   var $ = function (sel) { return document.querySelector(sel); };
 
   var el = {
-    art: $('#artScene'), artCaption: $('#artCaption'),
+    artImg: $('#artImg'),
     recall: $('#recall'), recallCount: $('#recallCount'), ringFg: $('#ringFg'),
     phrase: $('#phrase'),
     answer: $('#answer'), inputStatus: $('#inputStatus'), mic: $('#btnMic'),
@@ -100,7 +100,7 @@
   /** 訳・キャプション・品詞分解（言語を切り替えたときはここだけ描き直す） */
   function renderPhraseTexts(p) {
     var tr = I18N.phrase(p.vi);
-    el.artCaption.textContent = tr.caption;
+    el.artImg.alt = tr.t;   // 代替テキストは訳（ベトナム語は伏せたままにする）
     el.ja.textContent = tr.t;
     el.words.innerHTML = p.words.map(function (w) {
       var e = I18N.word(p.vi, w.w);
@@ -114,14 +114,26 @@
     el.note.textContent = tr.note;
   }
 
+  // 画像が用意されていないフレーズでも崩れないよう、失敗したら差し替える
+  var FALLBACK_IMG = 'data:image/svg+xml,' + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">' +
+    '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">' +
+    '<stop offset="0" stop-color="#da251d"/><stop offset="1" stop-color="#ffcd00"/>' +
+    '</linearGradient></defs><rect width="120" height="60" fill="url(#g)" opacity=".25"/>' +
+    '<text x="60" y="40" font-size="28" text-anchor="middle" fill="#ffcd00">★</text></svg>');
+
+  el.artImg.addEventListener('error', function () {
+    if (el.artImg.getAttribute('data-fallback')) return;   // 差し替え後の失敗は無視
+    el.artImg.setAttribute('data-fallback', '1');
+    el.artImg.classList.add('missing');
+    el.artImg.src = FALLBACK_IMG;
+  });
+
   function renderCard(p) {
-    // イメージ画像
-    el.art.style.setProperty('--c1', p.art.colors[0]);
-    el.art.style.setProperty('--c2', p.art.colors[1]);
-    el.art.innerHTML =
-      '<span class="art-sub art-sub-a">' + p.art.sub[0] + '</span>' +
-      '<span class="art-main">' + p.art.main + '</span>' +
-      '<span class="art-sub art-sub-b">' + p.art.sub[1] + '</span>';
+    // イメージ画像（URL はフレーズから組み立てる）
+    el.artImg.classList.remove('missing');
+    el.artImg.removeAttribute('data-fallback');
+    el.artImg.src = window.phraseImage(p.vi);
 
     renderPhraseTexts(p);
 
@@ -182,6 +194,10 @@
     setStatus('', '');
     renderCard(p);
     renderStats();
+
+    // 次のフレーズの画像を先に取っておく
+    var next = state.queue[state.idx + 1];
+    if (next) { var pre = new Image(); pre.src = window.phraseImage(next.vi); }
 
     var delayMs = settings.delay * 1000;
     var hasMarks = Telex.hasDiacritics(p.vi);

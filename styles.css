@@ -90,25 +90,22 @@ html, body {
 .card.success { box-shadow: 0 0 0 3px rgba(18, 163, 124, .35), var(--shadow); }
 
 /* ---------- イメージ画像 ---------- */
-.art { margin: 0 0 18px; }
-.art-scene {
-  position: relative;
-  height: clamp(140px, 26vw, 190px);
-  border-radius: 14px;
-  background: linear-gradient(140deg, var(--c1, #ddd), var(--c2, #999));
-  display: flex; align-items: center; justify-content: center;
-  overflow: hidden;
+/* カードの余白を打ち消して上端いっぱいに出す */
+.art { margin: calc(-1 * var(--pad)) calc(-1 * var(--pad)) 18px; }
+.art-img {
+  display: block; width: 100%;
+  aspect-ratio: 16 / 9;
+  /* 画面が低いときは、フレーズと訳が入力欄の裏に隠れないところまで縮める */
+  max-height: max(160px, calc(100vh - 350px));
+  object-fit: cover;
+  /* カード上端に接するので、角丸は枠線の内側に合わせる */
+  border-radius: calc(var(--radius) - 1px) calc(var(--radius) - 1px) 0 0;
+  background: var(--bg);          /* 読み込み中・失敗時の下地 */
+  animation: artin .35s ease;
 }
-.art-scene::after {
-  content: ""; position: absolute; inset: 0;
-  background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, .45), transparent 55%);
-}
-.art-main { font-size: clamp(56px, 12vw, 84px); filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .2)); z-index: 1; }
-.art-sub { position: absolute; font-size: clamp(24px, 5vw, 34px); opacity: .75; }
-.art-sub-a { top: 14%; left: 12%; animation: float 5s ease-in-out infinite; }
-.art-sub-b { bottom: 14%; right: 12%; animation: float 6s ease-in-out infinite reverse; }
-@keyframes float { 50% { transform: translateY(-10px); } }
-.art-caption { margin: 8px 2px 0; font-size: 11px; color: var(--fg-dim); letter-spacing: .08em; text-transform: uppercase; }
+@keyframes artin { from { opacity: 0; } }
+/* 画像が無いフレーズでも高さが崩れないようにする */
+.art-img.missing { object-fit: contain; opacity: .35; }
 
 /* ---------- リコール & フレーズ ---------- */
 .phrase-zone { min-height: 96px; display: flex; flex-direction: column; justify-content: center; }

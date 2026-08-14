@@ -1,13 +1,28 @@
 /* 練習フレーズ（言語に依存しないデータ）
- * vi    : ベトナム語フレーズ。翻訳データのキーにもなる
- * art   : イメージ画像（絵文字で構成したシーン）
+ * vi    : ベトナム語フレーズ。翻訳データのキーであり、画像 URL の元にもなる
  * words : 品詞分解 [{ w: 語, pos: 品詞キー }]
- * 訳・説明・キャプションは js/lang/<言語>.js 側に vi をキーにして持つ
+ * 訳と説明は js/lang/<言語>.js 側に vi をキーにして持つ
  */
+
+/** 'Chúc ngủ ngon!' -> 'chuc-ngu-ngon' */
+window.slugify = function (text) {
+  return String(text)
+    .normalize('NFD')
+    .replace(/\p{M}/gu, '')
+    .replace(/đ/gi, 'd')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+};
+
+/** フレーズのイメージ画像 URL（'Chúc ngủ ngon!' -> .../chuc-ngu-ngon.jpg） */
+window.PHRASE_IMAGE_BASE = 'https://ik.imagekit.io/ww/';
+window.phraseImage = function (vi) {
+  return window.PHRASE_IMAGE_BASE + window.slugify(vi) + '.jpg';
+};
 window.PHRASES = [
   {
     vi: 'Xin chào!',
-    art: { main: '👋', sub: ['🌤️', '🙂'], colors: ['#ffd76e', '#ff8a5c'] },
     words: [
       { w: 'Xin', pos: 'polite' },
       { w: 'chào', pos: 'verb' }
@@ -15,7 +30,6 @@ window.PHRASES = [
   },
   {
     vi: 'Cảm ơn bạn nhiều.',
-    art: { main: '🙏', sub: ['💐', '✨'], colors: ['#a0e7a0', '#38b48b'] },
     words: [
       { w: 'Cảm ơn', pos: 'verb' },
       { w: 'bạn', pos: 'pronoun' },
@@ -24,7 +38,6 @@ window.PHRASES = [
   },
   {
     vi: 'Tôi tên là Nam.',
-    art: { main: '🪪', sub: ['🙋', '✍️'], colors: ['#9ec5ff', '#4a6cf7'] },
     words: [
       { w: 'Tôi', pos: 'pronoun' },
       { w: 'tên', pos: 'noun' },
@@ -34,7 +47,6 @@ window.PHRASES = [
   },
   {
     vi: 'Bạn khỏe không?',
-    art: { main: '💪', sub: ['😀', '❓'], colors: ['#ffb3c7', '#ef5da8'] },
     words: [
       { w: 'Bạn', pos: 'pronoun' },
       { w: 'khỏe', pos: 'adjective' },
@@ -43,7 +55,6 @@ window.PHRASES = [
   },
   {
     vi: 'Tôi là người Nhật.',
-    art: { main: '🗾', sub: ['🧑', '✈️'], colors: ['#ffd0d0', '#e8384f'] },
     words: [
       { w: 'Tôi', pos: 'pronoun' },
       { w: 'là', pos: 'copula' },
@@ -53,7 +64,6 @@ window.PHRASES = [
   },
   {
     vi: 'Rất vui được gặp bạn.',
-    art: { main: '🤝', sub: ['😊', '🎉'], colors: ['#ffe08a', '#f2a03d'] },
     words: [
       { w: 'Rất', pos: 'adverb' },
       { w: 'vui', pos: 'adjective' },
@@ -64,7 +74,6 @@ window.PHRASES = [
   },
   {
     vi: 'Cho tôi một ly cà phê sữa đá.',
-    art: { main: '☕', sub: ['🧊', '🥛'], colors: ['#d2a679', '#6f4e37'] },
     words: [
       { w: 'Cho', pos: 'verb' },
       { w: 'tôi', pos: 'pronoun' },
@@ -77,7 +86,6 @@ window.PHRASES = [
   },
   {
     vi: 'Cái này giá bao nhiêu?',
-    art: { main: '🏷️', sub: ['🛍️', '💵'], colors: ['#b9f2d0', '#12a37c'] },
     words: [
       { w: 'Cái', pos: 'classifier' },
       { w: 'này', pos: 'demonstrative' },
@@ -87,7 +95,6 @@ window.PHRASES = [
   },
   {
     vi: 'Tôi không hiểu.',
-    art: { main: '🤔', sub: ['❓', '💭'], colors: ['#cfd4ff', '#6b73d6'] },
     words: [
       { w: 'Tôi', pos: 'pronoun' },
       { w: 'không', pos: 'negator' },
@@ -96,7 +103,6 @@ window.PHRASES = [
   },
   {
     vi: 'Xin lỗi, nhà vệ sinh ở đâu?',
-    art: { main: '🚻', sub: ['🧭', '🙇'], colors: ['#a8dcff', '#2f80ed'] },
     words: [
       { w: 'Xin lỗi', pos: 'idiom' },
       { w: 'nhà vệ sinh', pos: 'noun' },
@@ -106,7 +112,6 @@ window.PHRASES = [
   },
   {
     vi: 'Món này rất ngon.',
-    art: { main: '🍜', sub: ['😋', '🌿'], colors: ['#ffd9a0', '#e4572e'] },
     words: [
       { w: 'Món', pos: 'noun' },
       { w: 'này', pos: 'demonstrative' },
@@ -116,7 +121,6 @@ window.PHRASES = [
   },
   {
     vi: 'Hẹn gặp lại nhé!',
-    art: { main: '👋', sub: ['🌇', '🙌'], colors: ['#ffc8a2', '#f2704b'] },
     words: [
       { w: 'Hẹn', pos: 'verb' },
       { w: 'gặp', pos: 'verb' },
@@ -126,7 +130,6 @@ window.PHRASES = [
   },
   {
     vi: 'Tôi muốn học tiếng Việt.',
-    art: { main: '📚', sub: ['🇻🇳', '✏️'], colors: ['#ffe6a7', '#d4a017'] },
     words: [
       { w: 'Tôi', pos: 'pronoun' },
       { w: 'muốn', pos: 'auxiliary' },
@@ -137,7 +140,6 @@ window.PHRASES = [
   },
   {
     vi: 'Hôm nay trời đẹp quá!',
-    art: { main: '☀️', sub: ['🌈', '🕊️'], colors: ['#bfe6ff', '#4aa3df'] },
     words: [
       { w: 'Hôm nay', pos: 'noun' },
       { w: 'trời', pos: 'noun' },
@@ -147,7 +149,6 @@ window.PHRASES = [
   },
   {
     vi: 'Bạn nói tiếng Anh được không?',
-    art: { main: '💬', sub: ['🌍', '🗣️'], colors: ['#c9c2ff', '#7159d1'] },
     words: [
       { w: 'Bạn', pos: 'pronoun' },
       { w: 'nói', pos: 'verb' },
@@ -157,7 +158,6 @@ window.PHRASES = [
   },
   {
     vi: 'Tôi bị lạc đường.',
-    art: { main: '🗺️', sub: ['😵‍💫', '📍'], colors: ['#ffcfcf', '#d64550'] },
     words: [
       { w: 'Tôi', pos: 'pronoun' },
       { w: 'bị', pos: 'passive' },
@@ -167,7 +167,6 @@ window.PHRASES = [
   },
   {
     vi: 'Làm ơn nói chậm hơn.',
-    art: { main: '🐢', sub: ['🗣️', '🙏'], colors: ['#c6ecc6', '#2e8b57'] },
     words: [
       { w: 'Làm ơn', pos: 'idiom' },
       { w: 'nói', pos: 'verb' },
@@ -177,7 +176,6 @@ window.PHRASES = [
   },
   {
     vi: 'Tôi sống ở Hà Nội.',
-    art: { main: '🏙️', sub: ['🏠', '🛵'], colors: ['#ffdfa6', '#c9762f'] },
     words: [
       { w: 'Tôi', pos: 'pronoun' },
       { w: 'sống', pos: 'verb' },
@@ -187,7 +185,6 @@ window.PHRASES = [
   },
   {
     vi: 'Ngày mai tôi đi làm.',
-    art: { main: '💼', sub: ['🌅', '🚶'], colors: ['#ffd6e0', '#b5477b'] },
     words: [
       { w: 'Ngày mai', pos: 'noun' },
       { w: 'tôi', pos: 'pronoun' },
@@ -197,7 +194,6 @@ window.PHRASES = [
   },
   {
     vi: 'Chúc ngủ ngon!',
-    art: { main: '🌙', sub: ['⭐', '😴'], colors: ['#b9c6ff', '#3b3f8f'] },
     words: [
       { w: 'Chúc', pos: 'verb' },
       { w: 'ngủ', pos: 'verb' },

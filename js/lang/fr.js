@@ -85,102 +85,102 @@ I18N.register('fr', {
 
   phrases: {
     'Xin chào!': {
-      t: 'Bonjour !', caption: 'Salutation',
+      t: 'Bonjour !',
       note: 'Valable à toute heure. Plus naturel si l’on s’adapte à l’interlocuteur : Chào anh (homme plus âgé) / Chào chị (femme plus âgée).',
       w: { 'Xin': ['s’il vous plaît', 'Devant le verbe, ajoute de la politesse'], 'chào': ['saluer', 'Correspond à « bonjour »'] }
     },
     'Cảm ơn bạn nhiều.': {
-      t: 'Merci beaucoup.', caption: 'Remercier',
+      t: 'Merci beaucoup.',
       note: 'Le vietnamien suit l’ordre verbe + objet + degré : nhiều vient donc à la fin, et non devant le verbe.',
       w: { 'Cảm ơn': ['remercier', 'Mot d’origine sino-vietnamienne'], 'bạn': ['toi (même âge)', 'Signifie à l’origine « ami »'], 'nhiều': ['beaucoup', 'Après le verbe, pour le renforcer'] }
     },
     'Tôi tên là Nam.': {
-      t: 'Je m’appelle Nam.', caption: 'Se présenter',
+      t: 'Je m’appelle Nam.',
       note: 'Il suffit d’aligner les mots : je – nom – être – Nam. Aucun possessif n’est nécessaire.',
       w: { 'Tôi': ['je', 'Pronom neutre, utilisable avec des inconnus et des aînés'], 'tên': ['nom', ''], 'là': ['être', 'Relie deux noms ; jamais devant un adjectif'], 'Nam': ['Nam (prénom)', ''] }
     },
     'Bạn khỏe không?': {
-      t: 'Comment allez-vous ?', caption: 'Prendre des nouvelles',
+      t: 'Comment allez-vous ?',
       note: 'không signifie « ne… pas » devant le verbe, mais transforme la phrase en question à la fin.',
       w: { 'Bạn': ['tu, vous', ''], 'khỏe': ['en forme, en bonne santé', 'Les adjectifs se rattachent directement, sans là'], 'không': ['particule interrogative', 'À la fin, crée une question oui/non'] }
     },
     'Tôi là người Nhật.': {
-      t: 'Je suis japonais.', caption: 'Nationalité',
+      t: 'Je suis japonais.',
       note: 'Les compléments suivent le nom : người Nhật, littéralement « personne + Japon ».',
       w: { 'Tôi': ['je', ''], 'là': ['être', ''], 'người': ['personne', 'Devant un nom de pays, forme le gentilé'], 'Nhật': ['Japon', 'Officiellement Nhật Bản'] }
     },
     'Rất vui được gặp bạn.': {
-      t: 'Enchanté de vous rencontrer.', caption: 'Première rencontre',
+      t: 'Enchanté de vous rencontrer.',
       note: 'rất se place avant l’adjectif et nhiều après le verbe : les deux disent « beaucoup », mais pas au même endroit.',
       w: { 'Rất': ['très', 'Se place avant l’adjectif'], 'vui': ['content, joyeux', ''], 'được': ['avoir l’occasion de', 'Marque de type passif pour les choses agréables'], 'gặp': ['rencontrer', ''], 'bạn': ['toi, vous', ''] }
     },
     'Cho tôi một ly cà phê sữa đá.': {
-      t: 'Un café au lait glacé, s’il vous plaît.', caption: 'Commander au café',
+      t: 'Un café au lait glacé, s’il vous plaît.',
       note: 'Les quantités suivent l’ordre nombre + classificateur + nom, et les boissons se nomment de la base vers les ajouts.',
       w: { 'Cho': ['donner → s’il vous plaît', 'En début de phrase, exprime une demande'], 'tôi': ['à moi', ''], 'một': ['un', ''], 'ly': ['verre (classificateur)', 'Mot du Sud ; cốc au Nord'], 'cà phê': ['café', 'Du français « café »'], 'sữa': ['lait', ''], 'đá': ['glace', ''] }
     },
     'Cái này giá bao nhiêu?': {
-      t: 'Combien coûte ceci ?', caption: 'Faire des achats',
+      t: 'Combien coûte ceci ?',
       note: 'Les démonstratifs suivent le nom : cái này, littéralement « chose + celle-ci ».',
       w: { 'Cái': ['chose (classificateur)', 'Le classificateur le plus général'], 'này': ['ce, ceci', 'Se place après le nom'], 'giá': ['prix', ''], 'bao nhiêu': ['combien', 'Pour les quantités au-dessus de dix'] }
     },
     'Tôi không hiểu.': {
-      t: 'Je ne comprends pas.', caption: 'Faire répéter',
+      t: 'Je ne comprends pas.',
       note: 'Pour la négation, il suffit de placer không devant le verbe. Les verbes ne se conjuguent pas.',
       w: { 'Tôi': ['je', ''], 'không': ['ne… pas', 'Juste avant le verbe ou l’adjectif'], 'hiểu': ['comprendre', ''] }
     },
     'Xin lỗi, nhà vệ sinh ở đâu?': {
-      t: 'Excusez-moi, où sont les toilettes ?', caption: 'Demander un lieu',
+      t: 'Excusez-moi, où sont les toilettes ?',
       note: 'Les mots interrogatifs restent là où irait la réponse ; ils ne remontent pas en tête de phrase.',
       w: { 'Xin lỗi': ['excusez-moi, pardon', 'Sert à s’excuser et à interpeller'], 'nhà vệ sinh': ['toilettes', 'Littéralement « maison d’hygiène »'], 'ở': ['se trouver à', ''], 'đâu': ['où', 'Se place à la fin'] }
     },
     'Món này rất ngon.': {
-      t: 'Ce plat est très bon.', caption: 'Au repas',
+      t: 'Ce plat est très bon.',
       note: 'On ne met jamais là devant un adjectif : « Món này là ngon » est incorrect.',
       w: { 'Món': ['plat', ''], 'này': ['ce', ''], 'rất': ['très', ''], 'ngon': ['bon, savoureux', ''] }
     },
     'Hẹn gặp lại nhé!': {
-      t: 'À bientôt !', caption: 'Prendre congé',
+      t: 'À bientôt !',
       note: 'La particule finale nhé adoucit la phrase, comme un « d’accord ? » amical.',
       w: { 'Hẹn': ['convenir d’un rendez-vous', ''], 'gặp': ['rencontrer', ''], 'lại': ['de nouveau', 'Se place après le verbe'], 'nhé': ['finale amicale', 'Avec un aîné, on utilise ạ'] }
     },
     'Tôi muốn học tiếng Việt.': {
-      t: 'Je veux apprendre le vietnamien.', caption: 'Envie d’apprendre',
+      t: 'Je veux apprendre le vietnamien.',
       note: 'người + pays signifie « personne de… » et tiếng + pays « langue de… ». Deux schémas, beaucoup de vocabulaire.',
       w: { 'Tôi': ['je', ''], 'muốn': ['vouloir', 'Se place avant le verbe'], 'học': ['apprendre', ''], 'tiếng': ['langue', 'Devant un pays : « la langue de… »'], 'Việt': ['Vietnam', ''] }
     },
     'Hôm nay trời đẹp quá!': {
-      t: 'Il fait très beau aujourd’hui !', caption: 'Parler du temps',
+      t: 'Il fait très beau aujourd’hui !',
       note: 'Le temps vient de mots comme hôm nay ou ngày mai, pas du verbe, qui reste invariable.',
       w: { 'Hôm nay': ['aujourd’hui', 'Les mots de temps se placent souvent en tête'], 'trời': ['ciel, temps', ''], 'đẹp': ['beau', ''], 'quá': ['vraiment, trop', 'Après l’adjectif, donne un ton exclamatif'] }
     },
     'Bạn nói tiếng Anh được không?': {
-      t: 'Parlez-vous anglais ?', caption: 'Vérifier',
+      t: 'Parlez-vous anglais ?',
       note: 'Verbe + objet + được không ? est la tournure standard pour demander si quelque chose est possible.',
       w: { 'Bạn': ['tu, vous', ''], 'nói': ['parler', ''], 'tiếng Anh': ['anglais', ''], 'được không': ['pouvez-vous… ?', 'À la fin, interroge sur la capacité'] }
     },
     'Tôi bị lạc đường.': {
-      t: 'Je me suis perdu.', caption: 'Problème',
+      t: 'Je me suis perdu.',
       note: 'bị et được forment une paire de marques passives : bị pour le désagréable, được pour l’agréable.',
       w: { 'Tôi': ['je', ''], 'bị': ['subir (passif)', 'Pour les événements fâcheux ; sinon được'], 'lạc': ['se perdre', ''], 'đường': ['route, chemin', ''] }
     },
     'Làm ơn nói chậm hơn.': {
-      t: 'Parlez plus lentement, s’il vous plaît.', caption: 'Faire une demande',
+      t: 'Parlez plus lentement, s’il vous plaît.',
       note: 'Le comparatif, c’est simplement adjectif + hơn : đẹp hơn (plus beau), rẻ hơn (moins cher).',
       w: { 'Làm ơn': ['s’il vous plaît', 'Demande polie en début de phrase'], 'nói': ['parler', ''], 'chậm': ['lent', ''], 'hơn': ['plus', 'Après l’adjectif, forme le comparatif'] }
     },
     'Tôi sống ở Hà Nội.': {
-      t: 'J’habite à Hanoï.', caption: 'Où l’on habite',
+      t: 'J’habite à Hanoï.',
       note: 'Les noms de lieux prennent une majuscule à chaque syllabe (Hà Nội, Hồ Chí Minh) et les tons font partie de l’orthographe.',
       w: { 'Tôi': ['je', ''], 'sống': ['vivre, habiter', ''], 'ở': ['à', 'Indique le lieu'], 'Hà Nội': ['Hanoï', 'Littéralement « à l’intérieur du fleuve »'] }
     },
     'Ngày mai tôi đi làm.': {
-      t: 'Demain, je vais au travail.', caption: 'Projets',
+      t: 'Demain, je vais au travail.',
       note: 'Un mot de temps suffit pour le futur : sẽ (« va ») peut être omis. Le verbe ne change pas.',
       w: { 'Ngày mai': ['demain', 'Littéralement « le jour qui vient »'], 'tôi': ['je', ''], 'đi': ['aller', ''], 'làm': ['travailler', 'đi làm : « aller travailler »'] }
     },
     'Chúc ngủ ngon!': {
-      t: 'Bonne nuit !', caption: 'Avant de dormir',
+      t: 'Bonne nuit !',
       note: 'ngon veut dire « savoureux » mais aussi « agréable » : ngủ ngon, c’est « dors bien ».',
       w: { 'Chúc': ['souhaiter', 'Aussi dans Chúc mừng — félicitations'], 'ngủ': ['dormir', ''], 'ngon': ['agréable', 'Pour la nourriture : « savoureux »'] }
     }

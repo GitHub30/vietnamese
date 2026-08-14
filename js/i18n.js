@@ -94,7 +94,7 @@ window.I18N = (function () {
 
   /**
    * フレーズの訳。ベトナム語のフレーズがキー。
-   * { t: 訳, caption: 場面, note: 説明, w: { 語: [意味, 補足] } }
+   * { t: 訳, note: 説明, w: { 語: [意味, 補足] } }
    */
   function phrase(vi) {
     var p = pack(current), f = pack(FALLBACK);
@@ -102,7 +102,6 @@ window.I18N = (function () {
     var fb = (f.phrases && f.phrases[vi]) || {};
     return {
       t: e.t || fb.t || '',
-      caption: e.caption || fb.caption || '',
       note: e.note || fb.note || '',
       w: e.w || fb.w || {}
     };

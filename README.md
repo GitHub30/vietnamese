@@ -14,7 +14,7 @@
 
 ## 画面の構成（上から）
 
-- イメージ画像
+- イメージ画像（`vi` から URL を組み立てて読み込む）
 - ベトナム語フレーズ（遅れて表示 / 入力に合わせて 1 文字ずつ色が変わる。素の文字が合っていれば、足りない記号だけが赤くなる）
 - 訳
 - 品詞分解（語・品詞・意味・補足）と、フレーズ全体の文法説明
@@ -130,7 +130,6 @@ git add -A && git commit -m "Add Vietnamese typing drill app" && git push -u ori
 ```js
 {
   vi: 'Tôi rất thích phở.',
-  art: { main: '🍲', sub: ['❤️', '🌿'], colors: ['#ffd9a0', '#e4572e'] },
   words: [
     { w: 'Tôi',   pos: 'pronoun' },
     { w: 'rất',   pos: 'adverb' },
@@ -145,7 +144,6 @@ git add -A && git commit -m "Add Vietnamese typing drill app" && git push -u ori
 ```js
 'Tôi rất thích phở.': {
   t: '私はフォーが大好きです。',
-  caption: '好きなもの',
   note: '説明文をここに書きます。',
   w: {
     'Tôi':   ['私', ''],
@@ -159,6 +157,7 @@ git add -A && git commit -m "Add Vietnamese typing drill app" && git push -u ori
 - `pos` は品詞のキーで、ラベルは各言語ファイルの `pos` から引きます（`pronoun` `verb` `classifier` など 21 種類）
 - 未翻訳の言語では英語の内容にフォールバックするので、全言語をいっぺんに書く必要はありません
 - TELEX ヒントは `vi` から自動生成されるので、記述は不要です
+- イメージ画像も `vi` から URL を組み立てます（`Tôi rất thích phở.` → `https://ik.imagekit.io/ww/toi-rat-thich-pho.jpg`）。声調記号を外して小文字化し、記号をハイフンに置き換えたファイル名を、あらかじめアップロードしておいてください。画像が無い場合は控えめなプレースホルダに差し替わります
 
 ## 言語を追加する
 
