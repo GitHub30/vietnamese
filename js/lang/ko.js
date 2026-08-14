@@ -11,6 +11,7 @@ I18N.register('ko', {
     start: '▶ 연습 시작',
     gateNote1: '읽기와 음성 인식은 Chrome / Edge 를 권장합니다.',
     gateNote2: '대기 시간과 읽기 속도는 ⚙️ 에서 바꿀 수 있습니다.',
+    source: '소스 코드',
 
     recallTitle: '떠올려 보세요',
     recallSub: '베트남어로 뭐라고 할까요? 아는 사람은 바로 입력해도 됩니다',

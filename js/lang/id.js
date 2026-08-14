@@ -11,6 +11,7 @@ I18N.register('id', {
     start: '▶ Mulai berlatih',
     gateNote1: 'Gunakan Chrome atau Edge untuk suara dan pengenalan ucapan.',
     gateNote2: 'Waktu tunggu dan kecepatan baca bisa diubah lewat ⚙️.',
+    source: 'Kode sumber',
 
     recallTitle: 'Coba ingat dulu',
     recallSub: 'Bagaimana bahasa Vietnamnya? Kalau sudah tahu, langsung ketik saja',
