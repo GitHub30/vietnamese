@@ -11,6 +11,7 @@ I18N.register('de', {
     start: '▶ Üben starten',
     gateNote1: 'Für Sprachausgabe und Spracherkennung werden Chrome oder Edge empfohlen.',
     gateNote2: 'Wartezeit und Lesegeschwindigkeit lassen sich über ⚙️ ändern.',
+    source: 'Quellcode',
 
     recallTitle: 'Versuch dich zu erinnern',
     recallSub: 'Wie heißt das auf Vietnamesisch? Wer es weiß, tippt einfach los',

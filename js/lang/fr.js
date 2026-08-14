@@ -11,6 +11,7 @@ I18N.register('fr', {
     start: '▶ Commencer',
     gateNote1: 'Chrome ou Edge sont recommandés pour la lecture et la dictée.',
     gateNote2: 'Le délai et la vitesse de lecture se règlent depuis ⚙️.',
+    source: 'Code source',
 
     recallTitle: 'Essayez de vous en souvenir',
     recallSub: 'Comment le dit-on en vietnamien ? Si vous le savez déjà, tapez-le',

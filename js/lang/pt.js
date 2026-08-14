@@ -11,6 +11,7 @@ I18N.register('pt', {
     start: '▶ Começar a praticar',
     gateNote1: 'Chrome ou Edge são recomendados para a fala e o ditado.',
     gateNote2: 'A espera e a velocidade de leitura mudam em ⚙️.',
+    source: 'Código-fonte',
 
     recallTitle: 'Tente lembrar',
     recallSub: 'Como se diz em vietnamita? Se já souber, digite agora',

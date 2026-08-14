@@ -11,6 +11,7 @@ I18N.register('es', {
     start: '▶ Empezar a practicar',
     gateNote1: 'Se recomienda Chrome o Edge para la voz y el dictado.',
     gateNote2: 'La espera y la velocidad de lectura se cambian en ⚙️.',
+    source: 'Código fuente',
 
     recallTitle: 'Intenta recordarlo',
     recallSub: '¿Cómo se dice en vietnamita? Si ya lo sabes, escríbelo ya',

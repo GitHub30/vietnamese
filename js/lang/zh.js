@@ -11,6 +11,7 @@ I18N.register('zh', {
     start: '▶ 开始练习',
     gateNote1: '朗读与语音识别建议使用 Chrome / Edge。',
     gateNote2: '等待时间和朗读速度可在 ⚙️ 中调整。',
+    source: '源代码',
 
     recallTitle: '先回想一下',
     recallSub: '越南语怎么说？会的话可以直接输入',

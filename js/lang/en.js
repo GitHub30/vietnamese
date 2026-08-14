@@ -11,6 +11,7 @@ I18N.register('en', {
     start: '▶ Start practising',
     gateNote1: 'Chrome or Edge is recommended for speech and voice input.',
     gateNote2: 'Delay and reading speed can be changed from ⚙️.',
+    source: 'Source code',
 
     recallTitle: 'Try to recall it',
     recallSub: 'How do you say it in Vietnamese? Type it now if you already know',

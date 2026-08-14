@@ -11,6 +11,7 @@ I18N.register('ja', {
     start: '▶ 練習をはじめる',
     gateNote1: '読み上げ・音声認識には Chrome / Edge を推奨します。',
     gateNote2: '待ち時間や読み上げ速度は ⚙️ から変更できます。',
+    source: 'ソースコード',
 
     recallTitle: '思い出してみよう',
     recallSub: 'ベトナム語で何と言う？ 打てる人はそのまま入力してOK',

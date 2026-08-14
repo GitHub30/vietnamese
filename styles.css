@@ -250,6 +250,13 @@ html, body {
   background: var(--bg); border: 1px solid var(--line); border-radius: 5px; padding: 0 5px; color: var(--fg);
 }
 .gate-note { font-size: 11px; color: var(--fg-dim); margin: 14px 0 0; }
+.gate-source {
+  display: inline-flex; align-items: center; gap: 6px; margin-top: 14px;
+  font-size: 12px; color: var(--fg-dim); text-decoration: none;
+  border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px;
+}
+.gate-source:hover { color: var(--fg); border-color: var(--fg-dim); background: var(--bg); }
+.gate-source svg { flex: none; }
 .gate-lang {
   display: flex; align-items: center; justify-content: center; gap: 8px;
   font-size: 12px; color: var(--fg-dim); margin: 0 0 18px;
