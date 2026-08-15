@@ -94,8 +94,10 @@ html, body {
 .art-img {
   display: block; width: 100%;
   aspect-ratio: 16 / 9;
-  /* 画面が低いときは、フレーズと訳が入力欄の裏に隠れないところまで縮める */
+  /* 画面が低いときは、フレーズと訳が入力欄の裏に隠れないところまで縮める。
+     --vv はキーボードを除いた実際の表示高さ（app.js が入れる） */
   max-height: max(160px, calc(100vh - 350px));
+  max-height: max(160px, calc(var(--vv, 100dvh) - 350px));
   object-fit: cover;
   background: var(--bg);          /* 読み込み中・失敗時の下地 */
   animation: artin .35s ease;
@@ -307,3 +309,11 @@ html, body {
   .stage { padding: 0; }
   .card { border-inline: 0; }
 }
+
+/* キーボードが出て表示領域が低いとき（app.js が .short-view を付ける）。
+   画像より「フレーズと訳」を優先して、入力欄の裏に隠れないようにする */
+.short-view .art-img { max-height: max(70px, calc(var(--vv, 100dvh) - 300px)); }
+.short-view .art { margin-bottom: 10px; }
+.short-view .phrase-zone { min-height: 0; }
+.short-view .phrase { font-size: clamp(22px, 5.5vw, 30px); }
+.short-view .input-dock { margin-top: 10px; }

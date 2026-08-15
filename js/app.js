@@ -763,6 +763,22 @@
     nextCard();
   });
 
+  /* ---------------- 画面キーボード ---------------- */
+  // スマホでキーボードが出ると表示領域が半分ほどになり、フレーズと訳が入力欄の裏に隠れてしまう。
+  // 実際に見えている高さを CSS に渡し、低いときは画像を縮める（.short-view）
+  var SHORT_VIEW = 520;
+  function syncViewport() {
+    var h = (window.visualViewport ? window.visualViewport.height : window.innerHeight) || 0;
+    var root = document.documentElement;
+    root.style.setProperty('--vv', Math.round(h) + 'px');
+    root.classList.toggle('short-view', h > 0 && h <= SHORT_VIEW);
+  }
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', syncViewport);
+  }
+  window.addEventListener('resize', syncViewport);
+  syncViewport();
+
   // Web フォントが後から届くと字形が変わるので、実測したズレは捨ててやり直す
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(function () { shiftCache = {}; renderDiff(); });
