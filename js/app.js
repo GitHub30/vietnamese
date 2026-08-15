@@ -345,20 +345,22 @@
 
   /**
    * 末尾への1文字入力だけを打鍵列として積み上げ、そこから綴りを組み立て直す。
-   * 貼り付け・削除・カーソル移動があったときは、その時点の表示内容を打鍵列として取り直す
+   * 貼り付け・削除・スマホの IME 入力のあとは、その時点の表示内容を打鍵列として取り直す
    * （変換済みの文字も解釈できるので、続けて声調キーを打てる）。
    */
   function applyTelex(e) {
     var v = el.answer.value;
-    // 削除・貼り付け・カーソル移動のあとは、そのときの表示を打鍵列として取り直すだけ
-    if (e.inputType !== 'insertText' || !e.data || el.answer.selectionStart !== v.length) {
+    // カーソルが文字列の途中にあるときは、打鍵列を取り直すだけで変換しない
+    if (el.answer.selectionStart !== v.length) { state.raw = v; return; }
+
+    if (e.inputType === 'insertText' && e.data) {
+      // 直前の表示に足しただけなら打鍵列を伸ばす。
+      // そうでなければ（選択を置き換えた等）新しい内容を打鍵列として取り直す。
+      var prev = Telex.type(state.raw);
+      state.raw = (v === prev + e.data) ? state.raw + e.data : v;
+    } else {
       state.raw = v;
-      return;
     }
-    // 直前の表示に足しただけなら打鍵列を伸ばす。
-    // そうでなければ（選択を置き換えた等）新しい内容を打鍵列として取り直す。
-    var prev = Telex.type(state.raw);
-    state.raw = (v === prev + e.data) ? state.raw + e.data : v;
 
     var out = Telex.type(state.raw);
     if (out !== v) {
@@ -542,9 +544,18 @@
   }
 
   /* ---------------- イベント ---------------- */
+  // 日本語などの IME 変換中は触らない。
+  // ただしスマホのキーボード（Gboard など）は英字も1語ぶんを変換中として送ってくるため、
+  // タッチ端末で表示がラテン文字だけのときは変換する（これが無いと dd と打っても đ にならない）。
+  // かな・ハングルなどが混じっていれば変換中の文字なので、そのままにする。
+  var LATIN_ONLY = /^[ -~À-ɏḀ-ỿ]*$/;
+  var TOUCH = !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+  function shouldTelex(e) {
+    if (!settings.telex) return false;
+    return !e.isComposing || (TOUCH && LATIN_ONLY.test(el.answer.value));
+  }
   el.answer.addEventListener('input', function (e) {
-    // 日本語などの IME 変換中は触らない
-    if (settings.telex && !e.isComposing) applyTelex(e);
+    if (shouldTelex(e)) applyTelex(e);
     onInput();
   });
   // 正解は入力した時点で自動判定されるので、Enter はスキップに割り当てる
