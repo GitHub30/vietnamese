@@ -273,6 +273,21 @@ html, body {
 }
 .gate-source:hover { color: var(--fg); border-color: var(--fg-dim); background: var(--bg); }
 .gate-source svg { flex: none; }
+/* カテゴリ選択（練習中は画面を占有しないよう起動画面に置く） */
+.gate-cats { margin: 0 0 16px; }
+.gate-cats-label {
+  display: block; font-size: 11px; letter-spacing: .08em; color: var(--fg-dim);
+  margin-bottom: 8px; text-transform: uppercase;
+}
+.gate-cats .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.cat-chip {
+  border: 1px solid var(--line); background: transparent; color: var(--fg-dim);
+  padding: 6px 14px; border-radius: 999px; font-size: 13px; cursor: pointer;
+}
+.cat-chip:hover { border-color: var(--fg-dim); color: var(--fg); }
+.cat-chip.on { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
+.cat-chip .cat-count { opacity: .7; font-size: 11px; margin-inline-start: 5px; }
+
 .gate-lang {
   display: flex; align-items: center; justify-content: center; gap: 8px;
   font-size: 12px; color: var(--fg-dim); margin: 0 0 18px;

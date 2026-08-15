@@ -179,6 +179,11 @@
       <li data-i18n="step5">Voice input turns on automatically. Speak it, or type it</li>
       <li data-i18n="step6">Correct answers are detected as you type. Press Enter to skip (it comes back later)</li>
     </ol>
+    <div class="gate-cats">
+      <span class="gate-cats-label" data-i18n="setCategory">Category</span>
+      <div class="chips" id="gateCats"></div>
+    </div>
+
     <label class="gate-lang">
       <span data-i18n="setLang">Language</span>
       <select id="gateLang"></select>
@@ -196,6 +201,11 @@
 <dialog class="sheet" id="settings">
   <form method="dialog">
     <h2 data-i18n="setTitle">Settings</h2>
+
+    <div class="field">
+      <span data-i18n="setCategory">Category</span>
+      <select id="setCatSelect"></select>
+    </div>
 
     <div class="field">
       <span data-i18n="setLang">Language</span>

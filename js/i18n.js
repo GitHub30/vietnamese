@@ -18,6 +18,9 @@ window.I18N = (function () {
     { code: 'ar', name: 'العربية' },
     { code: 'zh', name: '中文' }
   ];
+  /** カテゴリ。'all' は絞り込みなし */
+  var CATS = ['all', 'greeting', 'food', 'animal', 'flower', 'travel', 'place'];
+
   var FALLBACK = 'en';
   var packs = {}, current = FALLBACK, loading = {};
 
@@ -86,6 +89,12 @@ window.I18N = (function () {
     return s;
   }
 
+  /** カテゴリ名 */
+  function cat(key) {
+    var p = pack(current), f = pack(FALLBACK);
+    return (p.cats && p.cats[key]) || (f.cats && f.cats[key]) || key;
+  }
+
   /** 品詞ラベル */
   function pos(key) {
     var p = pack(current), f = pack(FALLBACK);
@@ -137,12 +146,14 @@ window.I18N = (function () {
 
   return {
     LANGS: LANGS,
+    CATS: CATS,
     register: register,
     detect: detect,
     use: use,
     current: function () { return current; },
     dir: dir,
     t: t,
+    cat: cat,
     pos: pos,
     phrase: phrase,
     word: word,
