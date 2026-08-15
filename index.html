@@ -179,15 +179,16 @@
       <li data-i18n="step5">Voice input turns on automatically. Speak it, or type it</li>
       <li data-i18n="step6">Correct answers are detected as you type. Press Enter to skip (it comes back later)</li>
     </ol>
-    <div class="gate-cats">
-      <span class="gate-cats-label" data-i18n="setCategory">Category</span>
-      <div class="chips" id="gateCats"></div>
+    <div class="gate-picks">
+      <label class="gate-pick">
+        <span data-i18n="setCategory">Category</span>
+        <select id="gateCat"></select>
+      </label>
+      <label class="gate-pick">
+        <span data-i18n="setLang">Language</span>
+        <select id="gateLang"></select>
+      </label>
     </div>
-
-    <label class="gate-lang">
-      <span data-i18n="setLang">Language</span>
-      <select id="gateLang"></select>
-    </label>
     <button class="primary-btn big" id="btnStart" data-i18n="start">▶ Start practising</button>
     <p class="gate-note"><span data-i18n="gateNote1">Chrome or Edge is recommended for speech and voice input.</span><br><span data-i18n="gateNote2">Delay and reading speed can be changed from ⚙️.</span></p>
     <a class="gate-source" href="https://github.com/GitHub30/vietnamese" target="_blank" rel="noopener noreferrer">
