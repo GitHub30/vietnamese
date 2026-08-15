@@ -17,6 +17,7 @@
   };
 
   var DEFAULTS = {
+    cat: 'all',        // 出題するカテゴリ（'all' は全部）
     lang: '',          // 空ならブラウザの言語設定から判定する
     delay: 5,          // フレーズ表示までの秒数（アクティブリコール）
     rate1: 0.95,       // 1回目の読み上げ速度
@@ -84,8 +85,15 @@
   }
 
   /* ---------------- 出題キュー ---------------- */
+  /** カテゴリで絞り込む（該当が無ければ全件に戻す） */
+  function phrasesForCat(cat) {
+    if (!cat || cat === 'all') return window.PHRASES.slice();
+    var hit = window.PHRASES.filter(function (p) { return p.cat === cat; });
+    return hit.length ? hit : window.PHRASES.slice();
+  }
+
   function buildQueue() {
-    var q = window.PHRASES.slice();
+    var q = phrasesForCat(settings.cat);
     if (settings.shuffle) {
       for (var i = q.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
@@ -544,6 +552,44 @@
     save();
   });
 
+  /* ---------------- カテゴリ ---------------- */
+  var gateCats = $('#gateCats'), catSelect = $('#setCatSelect');
+
+  function catCount(cat) {
+    return cat === 'all' ? window.PHRASES.length
+      : window.PHRASES.filter(function (p) { return p.cat === cat; }).length;
+  }
+
+  function fillCats() {
+    gateCats.innerHTML = I18N.CATS.map(function (c) {
+      return '<button type="button" class="cat-chip' + (c === settings.cat ? ' on' : '') + '" data-cat="' + c + '">' +
+        esc(I18N.cat(c)) + '<span class="cat-count">' + catCount(c) + '</span></button>';
+    }).join('');
+    catSelect.innerHTML = I18N.CATS.map(function (c) {
+      return '<option value="' + c + '">' + esc(I18N.cat(c)) + '（' + catCount(c) + '）</option>';
+    }).join('');
+    catSelect.value = settings.cat;
+  }
+
+  /** カテゴリを変えたら、その場で出題し直す */
+  function changeCat(cat) {
+    if (cat === settings.cat) return;
+    settings.cat = cat;
+    save();
+    fillCats();
+    state.solved = 0; state.perfect = 0;
+    buildQueue();
+    renderStats();
+    if (document.getElementById('gate').hidden) nextCard();      // 練習中なら即切り替え
+    else renderCard(state.queue[0]);                             // 起動前ならカードだけ差し替え
+  }
+
+  gateCats.addEventListener('click', function (e) {
+    var chip = e.target.closest ? e.target.closest('.cat-chip') : null;
+    if (chip) changeCat(chip.getAttribute('data-cat'));
+  });
+  catSelect.addEventListener('change', function () { changeCat(catSelect.value); });
+
   /* ---------------- 表示言語 ---------------- */
   var langSelects = [$('#gateLang'), $('#setLangSelect')];
 
@@ -598,6 +644,7 @@
     I18N.apply();
     updateSeoTags(I18N.current());
     fillLangSelects();
+    fillCats();
     syncSettingsUI();
     renderVoiceSelect();
     if (state.current) renderPhraseTexts(state.current);

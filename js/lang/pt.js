@@ -23,6 +23,7 @@ I18N.register('pt', {
     settingsLabel: 'Configurações',
 
     setTitle: 'Configurações',
+    setCategory: 'Categoria',
     setLang: 'Idioma',
     setDelay: 'Espera antes de mostrar a frase',
     setRate1: 'Velocidade de leitura (1.ª vez)',
@@ -75,15 +76,234 @@ I18N.register('pt', {
     accuracy: 'Precisão {pct} ({a} de {b} sem erros)'
   },
 
+  cats: { all: 'Tudo', greeting: 'Saudações', food: 'Comida', animal: 'Animais', flower: 'Flores', travel: 'Viagem', place: 'Lugares' },
+
   pos: {
     polite: 'partícula de cortesia', verb: 'verbo', pronoun: 'pronome', adverb: 'advérbio', noun: 'substantivo',
     copula: 'cópula', proper: 'nome próprio', adjective: 'adjetivo', question: 'interrogativo',
     questionExpr: 'expressão interrogativa', auxiliary: 'auxiliar', numeral: 'numeral', classifier: 'classificador',
     demonstrative: 'demonstrativo', negator: 'negação', idiom: 'expressão fixa', particle: 'partícula final',
-    preposition: 'preposição', comparative: 'comparativo', passive: 'marca de passiva', verbPrep: 'verbo / preposição'
+    preposition: 'preposição', comparative: 'comparativo', passive: 'marca de passiva', verbPrep: 'verbo / preposição',
+    aspect: 'marca de aspecto', quantifier: 'quantificador'
   },
 
   phrases: {
+    'Chào buổi sáng!': {
+      t: 'Bom dia!',
+      note: 'buổi marca uma parte do dia: buổi sáng (manhã), buổi trưa (meio-dia), buổi tối (noite).',
+      w: { 'Chào': ['cumprimentar', 'A mesma palavra de Xin chào'], 'buổi sáng': ['manhã', 'Literalmente «o trecho matinal do dia»'] }
+    },
+
+    'Tôi muốn ăn phở bò.': {
+      t: 'Quero comer phở de carne.',
+      note: 'Nomes de pratos vão do prato ao ingrediente: phở bò (carne), phở gà (frango).',
+      w: { 'Tôi': ['eu', ''], 'muốn': ['querer', 'Vem antes do verbo'], 'ăn': ['comer', ''], 'phở': ['phở', 'Sopa de macarrão de arroz'], 'bò': ['boi, carne', ''] }
+    },
+    'Tôi thích ăn bánh mì.': {
+      t: 'Gosto de comer bánh mì.',
+      note: 'Depois de thích o verbo vem direto, sem preposição.',
+      w: { 'Tôi': ['eu', ''], 'thích': ['gostar', ''], 'ăn': ['comer', ''], 'bánh mì': ['pão, bánh mì', 'bánh cobre pães e bolos'] }
+    },
+    'Món này có cay không?': {
+      t: 'Este prato é apimentado?',
+      note: 'có … không? envolve a palavra sobre a qual você pergunta: o molde padrão de sim/não.',
+      w: { 'Món': ['prato', ''], 'này': ['este', 'Vem depois do substantivo'], 'có': ['ter, será que…', 'Abre a pergunta'], 'cay': ['apimentado', ''], 'không': ['partícula interrogativa', 'Fecha a pergunta'] }
+    },
+    'Cho tôi thêm rau thơm.': {
+      t: 'Mais ervas, por favor.',
+      note: 'thêm depois do verbo significa «mais»: cho thêm, ăn thêm, nói thêm.',
+      w: { 'Cho': ['dar → por favor', ''], 'tôi': ['para mim', ''], 'thêm': ['acrescentar, mais', ''], 'rau thơm': ['ervas frescas', 'Literalmente «verduras aromáticas»'] }
+    },
+    'Tôi không ăn được thịt.': {
+      t: 'Não posso comer carne.',
+      note: 'được depois do verbo significa «poder». Com không … được vira «não poder».',
+      w: { 'Tôi': ['eu', ''], 'không': ['não', ''], 'ăn': ['comer', ''], 'được': ['poder', 'Depois do verbo marca capacidade'], 'thịt': ['carne', ''] }
+    },
+    'Chị ơi, tính tiền!': {
+      t: 'Com licença, a conta!',
+      note: 'ơi serve para chamar: chị ơi para uma mulher um pouco mais velha, anh ơi para um homem, em ơi para alguém mais novo.',
+      w: { 'Chị': ['irmã mais velha → moça', 'Como se chama uma mulher um pouco mais velha'], 'ơi': ['ei, com licença', 'Partícula de chamamento'], 'tính tiền': ['fechar a conta', 'Literalmente «contar o dinheiro»'] }
+    },
+    'Trái cây ở đây rất tươi.': {
+      t: 'A fruta daqui é muito fresca.',
+      note: 'ở đây é «aqui». Troque por ở đó (aí) ou ở kia (lá).',
+      w: { 'Trái cây': ['fruta', 'Palavra do sul; quả no norte'], 'ở': ['em', ''], 'đây': ['aqui', ''], 'rất': ['muito', ''], 'tươi': ['fresco', ''] }
+    },
+    'Bún chả là món Hà Nội.': {
+      t: 'Bún chả é um prato de Hanói.',
+      note: 'Um topônimo logo após o substantivo indica origem: món Hà Nội, phở Nam Định.',
+      w: { 'Bún chả': ['bún chả', 'Porco grelhado com macarrão'], 'là': ['ser', ''], 'món': ['prato', ''], 'Hà Nội': ['Hanói', ''] }
+    },
+
+    'Con mèo đang ngủ.': {
+      t: 'O gato está dormindo.',
+      note: 'đang antes do verbo marca o que acontece agora, como o gerúndio.',
+      w: { 'Con': ['classificador de animais', 'Vem antes de quase todo nome de animal'], 'mèo': ['gato', ''], 'đang': ['estar …-ndo', 'Marca ação em curso'], 'ngủ': ['dormir', ''] }
+    },
+    'Con chó rất trung thành.': {
+      t: 'Cachorros são muito fiéis.',
+      note: 'Sem artigos nem plural, a frase serve para «o cachorro» e «os cachorros».',
+      w: { 'Con': ['classificador de animais', ''], 'chó': ['cachorro', ''], 'rất': ['muito', ''], 'trung thành': ['fiel', 'Palavra sino-vietnamita'] }
+    },
+    'Tôi nuôi một con chim.': {
+      t: 'Eu crio um passarinho.',
+      note: 'Ao contar: número + classificador + substantivo, então con fica entre một e chim.',
+      w: { 'Tôi': ['eu', ''], 'nuôi': ['criar', 'Vale para animais e filhos'], 'một': ['um', ''], 'con': ['classificador de animais', ''], 'chim': ['pássaro', ''] }
+    },
+    'Con trâu đang ăn cỏ.': {
+      t: 'O búfalo está comendo capim.',
+      note: 'O búfalo é uma imagem clássica do campo vietnamita e aparece em muitos ditados.',
+      w: { 'Con': ['classificador de animais', ''], 'trâu': ['búfalo', ''], 'đang': ['estar …-ndo', ''], 'ăn': ['comer', ''], 'cỏ': ['capim', ''] }
+    },
+    'Con voi rất to.': {
+      t: 'O elefante é muito grande.',
+      note: 'to e lớn significam «grande»; to é a palavra mais cotidiana.',
+      w: { 'Con': ['classificador de animais', ''], 'voi': ['elefante', ''], 'rất': ['muito', ''], 'to': ['grande', ''] }
+    },
+    'Con cá bơi trong ao.': {
+      t: 'O peixe nada no lago.',
+      note: 'trong é «dentro»; anda junto com ngoài (fora) e trên (em cima).',
+      w: { 'Con': ['classificador de animais', ''], 'cá': ['peixe', ''], 'bơi': ['nadar', ''], 'trong': ['em, dentro de', ''], 'ao': ['lago, açude', ''] }
+    },
+    'Con gà gáy mỗi sáng.': {
+      t: 'O galo canta toda manhã.',
+      note: 'mỗi é «cada» e vem antes do substantivo: mỗi ngày, mỗi tuần.',
+      w: { 'Con': ['classificador de animais', ''], 'gà': ['galo, galinha', ''], 'gáy': ['cantar (o galo)', ''], 'mỗi': ['cada', ''], 'sáng': ['manhã', ''] }
+    },
+    'Tôi sợ con rắn.': {
+      t: 'Tenho medo de cobra.',
+      note: 'sợ leva o objeto direto, sem preposição.',
+      w: { 'Tôi': ['eu', ''], 'sợ': ['temer', ''], 'con': ['classificador de animais', ''], 'rắn': ['cobra', ''] }
+    },
+    'Con khỉ leo cây rất giỏi.': {
+      t: 'Macacos sobem em árvores muito bem.',
+      note: 'giỏi depois do verbo diz que a ação é bem feita: nói giỏi, học giỏi.',
+      w: { 'Con': ['classificador de animais', ''], 'khỉ': ['macaco', ''], 'leo': ['subir, escalar', ''], 'cây': ['árvore', ''], 'rất': ['muito', ''], 'giỏi': ['habilidoso', ''] }
+    },
+    'Con bướm đậu trên hoa.': {
+      t: 'A borboleta pousa na flor.',
+      note: 'đậu serve para aves e insetos que pousam; como substantivo é «feijão».',
+      w: { 'Con': ['classificador de animais', ''], 'bướm': ['borboleta', ''], 'đậu': ['pousar', ''], 'trên': ['sobre', ''], 'hoa': ['flor', ''] }
+    },
+
+    'Hoa sen là quốc hoa.': {
+      t: 'O lótus é a flor nacional.',
+      note: 'quốc significa «nação» em palavras sino-vietnamitas: quốc hoa, quốc kỳ (bandeira), quốc ca (hino).',
+      w: { 'Hoa sen': ['lótus', 'Símbolo do Vietnã'], 'là': ['ser', ''], 'quốc hoa': ['flor nacional', ''] }
+    },
+    'Hoa đào nở vào mùa xuân.': {
+      t: 'As flores de pessegueiro desabrocham na primavera.',
+      note: 'vào marca tanto um momento quanto o movimento para dentro.',
+      w: { 'Hoa đào': ['flor de pessegueiro', 'A flor do Tết no norte'], 'nở': ['desabrochar', ''], 'vào': ['em', ''], 'mùa xuân': ['primavera', 'mùa = estação'] }
+    },
+    'Hoa mai vàng rất đẹp.': {
+      t: 'A flor de damasco amarela é linda.',
+      note: 'As cores vêm depois do substantivo: hoa mai vàng, áo dài trắng.',
+      w: { 'Hoa mai': ['flor de damasco', 'A flor do Tết no sul'], 'vàng': ['amarelo, dourado', ''], 'rất': ['muito', ''], 'đẹp': ['bonito', ''] }
+    },
+    'Tôi tặng em một bó hoa.': {
+      t: 'Eu te dou um buquê de flores.',
+      note: 'bó é o classificador de maços; para um talo só usa-se cành.',
+      w: { 'Tôi': ['eu', ''], 'tặng': ['presentear', ''], 'em': ['você (mais novo)', 'Também entre casais'], 'một': ['um', ''], 'bó': ['buquê (classificador)', ''], 'hoa': ['flor', ''] }
+    },
+    'Vườn nhà tôi có nhiều hoa.': {
+      t: 'No meu jardim há muitas flores.',
+      note: 'A posse é só ordem das palavras: vườn nhà tôi = jardim – casa – eu.',
+      w: { 'Vườn': ['jardim', ''], 'nhà': ['casa', ''], 'tôi': ['eu, meu', ''], 'có': ['ter, haver', ''], 'nhiều': ['muitos', 'Antes do substantivo significa «muitos»'], 'hoa': ['flor', ''] }
+    },
+    'Hoa hồng có gai.': {
+      t: 'Rosas têm espinhos.',
+      note: 'hồng aqui é «rosa» (a flor), mas também significa a cor rosa.',
+      w: { 'Hoa hồng': ['rosa', ''], 'có': ['ter', ''], 'gai': ['espinho', ''] }
+    },
+    'Mùi hoa nhài rất thơm.': {
+      t: 'O jasmim tem um cheiro ótimo.',
+      note: 'thơm serve tanto para cheiro bom quanto para sabor bom.',
+      w: { 'Mùi': ['cheiro', ''], 'hoa nhài': ['jasmim', 'O do chá de jasmim'], 'rất': ['muito', ''], 'thơm': ['perfumado', ''] }
+    },
+    'Hoa hướng dương quay về mặt trời.': {
+      t: 'Os girassóis se voltam para o sol.',
+      note: 'hướng dương significa literalmente «voltado para o sol»: o nome explica a frase.',
+      w: { 'Hoa hướng dương': ['girassol', ''], 'quay': ['virar', ''], 'về': ['para', ''], 'mặt trời': ['sol', 'Literalmente «rosto do céu»'] }
+    },
+    'Hoa giấy leo trên tường.': {
+      t: 'A buganvília sobe pelo muro.',
+      note: 'hoa giấy é literalmente «flor de papel», pelas pétalas finas.',
+      w: { 'Hoa giấy': ['buganvília', ''], 'leo': ['subir', ''], 'trên': ['sobre, por', ''], 'tường': ['muro, parede', ''] }
+    },
+    'Chợ hoa rất đông vào Tết.': {
+      t: 'O mercado de flores fica lotado no Tết.',
+      note: 'đông significa «cheio de gente» (e também «inverno» e «leste»; o contexto decide).',
+      w: { 'Chợ hoa': ['mercado de flores', 'chợ = mercado'], 'rất': ['muito', ''], 'đông': ['lotado', ''], 'vào': ['em, durante', ''], 'Tết': ['Tết', 'Ano-Novo lunar'] }
+    },
+
+    'Cho tôi một vé đi Huế.': {
+      t: 'Uma passagem para Huế, por favor.',
+      note: 'đi + lugar indica o destino: vé đi Huế é «passagem que vai para Huế».',
+      w: { 'Cho': ['dar → por favor', ''], 'tôi': ['para mim', ''], 'một': ['um', ''], 'vé': ['passagem, bilhete', ''], 'đi': ['ir', ''], 'Huế': ['Huế', 'Cidade do centro'] }
+    },
+    'Khách sạn ở gần đây không?': {
+      t: 'Tem hotel perto daqui?',
+      note: 'gần đây é «perto daqui»; gần é «perto» e xa é «longe».',
+      w: { 'Khách sạn': ['hotel', 'Literalmente «casa de hóspedes»'], 'ở': ['estar em', ''], 'gần đây': ['perto daqui', ''], 'không': ['partícula interrogativa', ''] }
+    },
+    'Tôi muốn thuê xe máy.': {
+      t: 'Quero alugar uma moto.',
+      note: 'xe cobre tudo que tem roda: xe máy, xe đạp (bicicleta), xe buýt (ônibus).',
+      w: { 'Tôi': ['eu', ''], 'muốn': ['querer', ''], 'thuê': ['alugar', ''], 'xe máy': ['moto', ''] }
+    },
+    'Chuyến bay bị hoãn rồi.': {
+      t: 'O voo foi adiado.',
+      note: 'rồi no fim indica que já aconteceu: o mais próximo de um passado.',
+      w: { 'Chuyến bay': ['voo', 'chuyến conta viagens'], 'bị': ['sofrer (passiva)', 'Para acontecimentos ruins'], 'hoãn': ['adiar', ''], 'rồi': ['já', 'Marca uma mudança concluída'] }
+    },
+
+    'Thành phố Hồ Chí Minh rất lớn.': {
+      t: 'A cidade de Ho Chi Minh é muito grande.',
+      note: 'No dia a dia ainda se diz Sài Gòn; o nome oficial aparece na escrita.',
+      w: { 'Thành phố': ['cidade', ''], 'Hồ Chí Minh': ['Ho Chi Minh', ''], 'rất': ['muito', ''], 'lớn': ['grande', ''] }
+    },
+    'Vịnh Hạ Long rất nổi tiếng.': {
+      t: 'A baía de Ha Long é muito famosa.',
+      note: 'Primeiro o acidente geográfico, depois o nome: vịnh (baía), sông (rio), núi (montanha).',
+      w: { 'Vịnh': ['baía', ''], 'Hạ Long': ['Ha Long', 'Literalmente «dragão que desce»'], 'rất': ['muito', ''], 'nổi tiếng': ['famoso', 'Literalmente «o nome flutua»'] }
+    },
+    'Đà Nẵng có bãi biển đẹp.': {
+      t: 'Da Nang tem uma praia linda.',
+      note: 'có significa «ter» e «haver», então um lugar pode «ter» suas características.',
+      w: { 'Đà Nẵng': ['Da Nang', ''], 'có': ['ter, haver', ''], 'bãi biển': ['praia', 'biển = mar'], 'đẹp': ['bonito', ''] }
+    },
+    'Hội An là phố cổ.': {
+      t: 'Hoi An é uma cidade antiga.',
+      note: 'cổ significa «antigo» em compostos: phố cổ, đồ cổ (antiguidades).',
+      w: { 'Hội An': ['Hoi An', ''], 'là': ['ser', ''], 'phố cổ': ['centro histórico', 'phố = rua, cidade'] }
+    },
+    'Sa Pa có ruộng bậc thang.': {
+      t: 'Sa Pa tem arrozais em terraços.',
+      note: 'ruộng bậc thang é literalmente «campos em degraus de escada».',
+      w: { 'Sa Pa': ['Sa Pa', 'Cidade de montanha no norte'], 'có': ['ter', ''], 'ruộng bậc thang': ['arrozais em terraços', 'bậc thang = escada'] }
+    },
+    'Huế từng là kinh đô.': {
+      t: 'Huế já foi a capital.',
+      note: 'từng antes do verbo diz que aconteceu em algum momento do passado.',
+      w: { 'Huế': ['Huế', ''], 'từng': ['já, costumava', ''], 'là': ['ser', ''], 'kinh đô': ['capital imperial', 'Hoje a capital é thủ đô'] }
+    },
+    'Đà Lạt mát quanh năm.': {
+      t: 'Da Lat é fresca o ano todo.',
+      note: 'Um adjetivo pode ser todo o predicado: sem là e sem verbo «ser».',
+      w: { 'Đà Lạt': ['Da Lat', 'Cidade serrana'], 'mát': ['fresco', ''], 'quanh năm': ['o ano todo', 'quanh = ao redor'] }
+    },
+    'Phú Quốc là một hòn đảo.': {
+      t: 'Phu Quoc é uma ilha.',
+      note: 'hòn é o classificador de ilhas e pedras: hòn đảo, hòn đá.',
+      w: { 'Phú Quốc': ['Phu Quoc', ''], 'là': ['ser', ''], 'một': ['um, uma', ''], 'hòn': ['classificador de ilhas', ''], 'đảo': ['ilha', ''] }
+    },
+    'Sông Mê Kông chảy ra biển.': {
+      t: 'O Mekong deságua no mar.',
+      note: 'ra é «para fora»; o oposto vào é «para dentro», e ambos grudam em verbos de movimento.',
+      w: { 'Sông': ['rio', ''], 'Mê Kông': ['Mekong', ''], 'chảy': ['fluir', ''], 'ra': ['para fora', ''], 'biển': ['mar', ''] }
+    },
+
     'Xin chào!': {
       t: 'Olá!',
       note: 'Serve a qualquer hora. Soa mais natural se adaptar ao interlocutor: Chào anh (homem mais velho) / Chào chị (mulher mais velha).',
