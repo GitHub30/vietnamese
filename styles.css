@@ -139,7 +139,8 @@ html, body {
 .phrase .mark-ng { display: inline-block; position: relative; color: var(--ng); }
 .phrase .mark-ng::after {
   content: attr(data-base);
-  position: absolute; left: 0; top: 0;
+  /* --mark-shift は字形のズレの実測値（app.js）。Đ のように中の D が右へずれる字だけ動かす */
+  position: absolute; left: var(--mark-shift, 0px); top: 0;
   color: var(--ok);
 }
 .phrase.correct { color: var(--ok); }
