@@ -415,10 +415,67 @@
       if (matched !== t.normalize('NFC')) {
         // 結合文字だけを別要素にしても Chrome は1つのグリフに合成して単色で描くため、
         // 文字全体を赤で描いた上に「合っている部分」を緑で重ねて、記号だけ赤く見せる
-        return '<span class="mark-ng" data-base="' + esc(matched) + '">' + esc(t) + '</span>';
+        var shift = overlayShift(matched, t);
+        return '<span class="mark-ng"' + (shift ? ' style="--mark-shift:' + shift + 'em"' : '') +
+               ' data-base="' + esc(matched) + '">' + esc(t) + '</span>';
       }
     }
     return '<span class="ng">' + esc(t) + '</span>';
+  }
+
+  /* ---- 重ね描きのズレ補正 ----
+   * Be Vietnam Pro の 'Đ' は横棒のぶん字幅が広く、中の D 自体も右へずれている。
+   * そのまま 'D' を重ねると 1px ほど食い違って見えるので、実際の字形から必要なズレを測って em で返す。
+   * フォントによって値が変わるため決め打ちにはせず、組み合わせごとに1回だけ実測して覚えておく。
+   */
+  var MEASURE_PX = 64;
+  var shiftCache = {};
+  var shiftCanvas = null;
+
+  function overlayShift(base, ch) {
+    var key = base + ' ' + ch;
+    if (shiftCache[key] === undefined) {
+      var v = 0;
+      try { v = measureShift(base, ch); } catch (e) {}
+      shiftCache[key] = v;
+    }
+    return shiftCache[key];
+  }
+
+  function measureShift(base, ch) {
+    var w = MEASURE_PX * 3, h = MEASURE_PX * 2, max = Math.round(MEASURE_PX / 4);
+    if (!shiftCanvas) {
+      shiftCanvas = document.createElement('canvas');
+      shiftCanvas.width = w; shiftCanvas.height = h;
+    }
+    var ctx = shiftCanvas.getContext('2d', { willReadFrequently: true });
+    var cs = getComputedStyle(el.phrase);
+    ctx.font = cs.fontWeight + ' ' + MEASURE_PX + 'px ' + cs.fontFamily;
+    ctx.textBaseline = 'alphabetic';
+
+    var a = glyphInk(ctx, base, w, h).px, b = glyphInk(ctx, ch, w, h).map;
+    // 素の文字が相手の字形から一番はみ出さない位置を探す（同じ字形なら 0 のまま）
+    var best = 0, least = -1;
+    for (var s = -max; s <= max; s++) {
+      var out = 0;
+      for (var i = 0; i < a.length; i++) {
+        var x = a[i] % w + s;
+        if (x < 0 || x >= w || !b[a[i] + s]) out++;
+      }
+      if (least < 0 || out < least || (out === least && Math.abs(s) < Math.abs(best))) { least = out; best = s; }
+    }
+    return Math.round(best / MEASURE_PX * 1000) / 1000;
+  }
+
+  /** 1文字を描いて、塗られている画素の位置（px）と参照用の表（map）を返す */
+  function glyphInk(ctx, ch, w, h) {
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillText(ch, w / 3, h * 0.75);
+    var d = ctx.getImageData(0, 0, w, h).data, px = [], map = new Uint8Array(w * h);
+    for (var i = 0; i < w * h; i++) {
+      if (d[i * 4 + 3] > 128) { map[i] = 1; px.push(i); }
+    }
+    return { px: px, map: map };
   }
 
   function succeed(how) {
@@ -708,6 +765,11 @@
     compatNote();
     nextCard();
   });
+
+  // Web フォントが後から届くと字形が変わるので、実測したズレは捨ててやり直す
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () { shiftCache = {}; renderDiff(); });
+  }
 
   // 言語パックを読み込んでから描画する
   // 優先順位: URL の ?lang= → 保存済みの設定 → ブラウザの言語設定
