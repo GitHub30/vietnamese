@@ -83,7 +83,6 @@ html, body {
   width: min(720px, 100%);
   background: var(--bg-2);
   border: 1px solid var(--line);
-  border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: var(--pad);
 }
@@ -98,8 +97,6 @@ html, body {
   /* 画面が低いときは、フレーズと訳が入力欄の裏に隠れないところまで縮める */
   max-height: max(160px, calc(100vh - 350px));
   object-fit: cover;
-  /* カード上端に接するので、角丸は枠線の内側に合わせる */
-  border-radius: calc(var(--radius) - 1px) calc(var(--radius) - 1px) 0 0;
   background: var(--bg);          /* 読み込み中・失敗時の下地 */
   animation: artin .35s ease;
 }
@@ -152,7 +149,6 @@ html, body {
   position: sticky; bottom: 0; z-index: 15;
   margin: 18px calc(-1 * var(--pad)) calc(-1 * var(--pad));
   padding: 10px var(--pad);
-  border-radius: 0 0 var(--radius) var(--radius);
   background: var(--bg-2);
   box-shadow: 0 -12px 16px -12px rgba(0, 0, 0, .35);
 }
@@ -306,4 +302,8 @@ html, body {
 @media (max-width: 560px) {
   .toasts { top: 12px; right: 12px; left: 12px; width: auto; }
   .word { grid-template-columns: 1fr; }
+
+  /* 狭い画面では左右の余白を捨てて画面いっぱいに使う。画面端に接するので枠線も外す */
+  .stage { padding: 0; }
+  .card { border-inline: 0; }
 }
