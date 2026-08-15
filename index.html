@@ -15,6 +15,12 @@
 <meta property="og:title" content="Tiếng Việt Drill — Vietnamese typing and pronunciation practice">
 <meta property="og:description" content="Type TELEX without UniKey, get tone-mark hints, hear each phrase twice and check your pronunciation by voice. 20 everyday phrases in 11 languages.">
 <meta property="og:url" content="https://hocviet.vn/" id="ogUrl">
+<!-- ImageKit は .png でも自動で JPEG に変換して配信するので og:image:type は image/jpeg -->
+<meta property="og:image" content="https://ik.imagekit.io/ww/ogp.png">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1920">
+<meta property="og:image:height" content="1080">
+<meta property="og:image:alt" content="Tiếng Việt Drill — a phrase card with illustration, translation and TELEX typing hints">
 <meta property="og:locale" content="en_US" id="ogLocale">
 <meta property="og:locale:alternate" content="es_ES">
 <meta property="og:locale:alternate" content="pt_BR">
@@ -26,9 +32,11 @@
 <meta property="og:locale:alternate" content="th_TH">
 <meta property="og:locale:alternate" content="ar_AR">
 <meta property="og:locale:alternate" content="zh_CN">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Tiếng Việt Drill — Vietnamese typing and pronunciation practice">
 <meta name="twitter:description" content="Type TELEX without UniKey, get tone-mark hints, hear each phrase twice and check your pronunciation by voice.">
+<meta name="twitter:image" content="https://ik.imagekit.io/ww/ogp.png">
+<meta name="twitter:image:alt" content="Tiếng Việt Drill — a phrase card with illustration, translation and TELEX typing hints">
 
 <link rel="alternate" hreflang="x-default" href="https://hocviet.vn/">
 <link rel="alternate" hreflang="en" href="https://hocviet.vn/?lang=en">
@@ -43,7 +51,10 @@
 <link rel="alternate" hreflang="ar" href="https://hocviet.vn/?lang=ar">
 <link rel="alternate" hreflang="zh" href="https://hocviet.vn/?lang=zh">
 
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23da251d'/><text x='50' y='72' font-size='72' text-anchor='middle' fill='%23ffcd00'>★</text></svg>">
+<!-- Google のファビコンはクロールできる URL でないと拾われない（data: URI は不可）ので実ファイルで置く -->
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&display=swap">
@@ -55,6 +66,7 @@
   "@type": "WebApplication",
   "name": "Tiếng Việt Drill",
   "url": "https://hocviet.vn/",
+  "image": "https://ik.imagekit.io/ww/ogp.png",
   "description": "Active-recall practice for Vietnamese phrases: TELEX input without UniKey, tone-mark hints, text-to-speech and voice input.",
   "applicationCategory": "EducationalApplication",
   "operatingSystem": "Any (web browser)",
