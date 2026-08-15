@@ -610,7 +610,7 @@
   });
 
   /* ---------------- カテゴリ ---------------- */
-  var gateCats = $('#gateCats'), catSelect = $('#setCatSelect');
+  var catSelects = [$('#gateCat'), $('#setCatSelect')];
 
   function catCount(cat) {
     return cat === 'all' ? window.PHRASES.length
@@ -618,14 +618,13 @@
   }
 
   function fillCats() {
-    gateCats.innerHTML = I18N.CATS.map(function (c) {
-      return '<button type="button" class="cat-chip' + (c === settings.cat ? ' on' : '') + '" data-cat="' + c + '">' +
-        esc(I18N.cat(c)) + '<span class="cat-count">' + catCount(c) + '</span></button>';
-    }).join('');
-    catSelect.innerHTML = I18N.CATS.map(function (c) {
+    var html = I18N.CATS.map(function (c) {
       return '<option value="' + c + '">' + esc(I18N.cat(c)) + '（' + catCount(c) + '）</option>';
     }).join('');
-    catSelect.value = settings.cat;
+    catSelects.forEach(function (sel) {
+      sel.innerHTML = html;
+      sel.value = settings.cat;
+    });
   }
 
   /** カテゴリを変えたら、その場で出題し直す */
@@ -641,11 +640,9 @@
     else renderCard(state.queue[0]);                             // 起動前ならカードだけ差し替え
   }
 
-  gateCats.addEventListener('click', function (e) {
-    var chip = e.target.closest ? e.target.closest('.cat-chip') : null;
-    if (chip) changeCat(chip.getAttribute('data-cat'));
+  catSelects.forEach(function (sel) {
+    sel.addEventListener('change', function () { changeCat(sel.value); });
   });
-  catSelect.addEventListener('change', function () { changeCat(catSelect.value); });
 
   /* ---------------- 表示言語 ---------------- */
   var langSelects = [$('#gateLang'), $('#setLangSelect')];
